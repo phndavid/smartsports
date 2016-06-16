@@ -1,11 +1,50 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="app">
 <head>
     <meta charset="utf-8">
     <title>Clasificación general</title>
+    <!--Import Google Icon Font-->
+    <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<!--Import materialize.css-->
+	<link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+	<!--Let browser know website is optimized for mobile-->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 </head>
 <body>
-    <h1>Clasificación general</h1>
-    
+	<div class="container" ng-controller="EventCtrl">
+    	<h2>Clasificación general</h2>
+    	<p><b>Event Id:</b><span> {{event.event.event_id}}</span></p>
+    	<p><b>Event Name:</b><span> {{event.event.event_name}}</span></p>
+		<p><b>Event Description:</b><span> {{event.event.event_description}}</span></p>
+    	  <table class="striped">
+	        <thead>
+	          <tr>
+	          	<th data-field="id">#</th>
+	            <th data-field="id">Entry Id</th>
+	            <th data-field="name">Entry Name</th>
+	            <th data-field="price">Race Id</th>
+	            <th data-field="price">Race Name</th>	            
+	          </tr>
+	        </thead>
+
+	        <tbody>
+	          <tr ng-repeat="entry in event_users.event_entry">
+	           	<td>{{$index+1}}</td>	        
+	            <td>{{entry.entry_id}}</td>
+	            <td>{{entry.entry_name}}</td>
+	            <td>{{entry.race_id}}</td>
+	            <td>{{entry.race_name}}</td>
+	          </tr>
+	        </tbody>
+	      </table>
+    </div>
+    <!--Import jQuery before materialize.js-->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="js/materialize.min.js"></script>
+    <!-- AngularJS -->
+    <script type="text/javascript" src="lib/angular.min.js"></script>
+    <script type="text/javascript" src="lib/angular-resource.min.js"></script>
+    <script type="text/javascript" src="lib/angular-route.min.js"></script>
+    <script type="text/javascript" src="js/app.js"></script>
 </body>
 </html>
