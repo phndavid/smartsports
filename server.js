@@ -1,40 +1,42 @@
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
-var ClientOAuth2 = require('client-oauth2')
-var port = 8090;
-// configure app to use bodyParser()
-// this will let us get the data from a POST
+var request = require('request');
+var port = process.env.OPENSHIFT_NODEJS_PORT || 8080;
+var ipaddress = process.env.OPENSHIFT_NODEJS_IP;
+ 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.static(__dirname+'/public'));
 
-var chronotrackAuth = new ClientOAuth2({
-  clientId: '6e42ab44',
-  clientSecret: 'b24fa5fd0a4a2f9e15f8b42b1419a1f5d1635908',
-  accessTokenUri: 'https://qa-api.chronotrack.com/oauth2/token',
-  authorizationUri: 'https://qa-api.chronotrack.com/oauth2/authorize',
-  authorizationGrants: ['credentials'],
-  redirectUri: 'http://localhost:8090/auth/callback',
-  scopes: ['notifications', 'gist']
-}) 
-var storeNewToken;
-var token = chronotrackAuth.createToken('afguzmans3@gmail.com', 'smartsports', 'bearer')
-
-// Refresh the users credentials and save the updated access token.
-token.refresh().then(storeNewToken)
-
-token.request({
-  method: 'get',
-  url: 'https://qa-api.chronotrack.com/api/event'
-})
-  .then(function (res) {
-    console.log(res) //=> { body: '...', status: 200, headers: { ... } }
-})
-// test route to make sure everything is working (accessed at GET http://localhost:8090/iot)
-app.get('/auth/callback', function(req, res) {
-    res.json({test:'successful!'});   
+var client_id = "727dae7f";
+var user_id = "afguzmans3%40gmail.com";
+var user_pass = "c16975b43862ff2fe4537d7eee5566af7b80f9d5";
+var hostname = "https://api.chronotrack.com:443";
+var event_id = "7849";
+var query_event = "/api/event/"+event_id+"?format=json&client_id="+client_id+"&user_id="+user_id+"&user_pass="+user_pass;
+var user_id = "7445801";
+var query_users = "/api/entry/"+user_id+"?format=json&client_id="+client_id+"&user_id="+user_id+"&user_pass="+user_pass;
+app.get('/event', function(req, res) {
+    var url = hostname+query_event;
+    console.log(url);
+    // request module is used to process the chrotrack url and return the results in JSON format
+     request(url, function(err, resp, body) {
+       body = JSON.parse(body);
+       res.json({body});
+     });   
 });
 
-app.listen(port);
-console.log('The App runs on port: ' +port);
+app.get('/event/users', function(req, res) {
+    var url = hostname+query_users;
+    console.log(url);
+    // request module is used to process the chrotrack url and return the results in JSON format
+     request(url, function(err, resp, body) {
+       body = JSON.parse(body);
+       res.json({body});
+     });   
+});
+app.listen(port, ipaddress, function() {
+            console.log('%s: Node server started on %s:%d ...',
+                        Date(Date.now() ), ipaddress, port);
+ });
