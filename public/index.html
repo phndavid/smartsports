@@ -22,6 +22,7 @@
 	          	<th data-field="id">#</th>
 	            <th data-field="id">Entry Id</th>
 	            <th data-field="name">Entry Name</th>
+   	            <th data-field="name">Sex</th>   	          
 	            <th data-field="price">Race Id</th>
 	            <th data-field="price">Race Name</th>	            
 	          </tr>
@@ -32,6 +33,7 @@
 	           	<td>{{$index+1}}</td>	        
 	            <td>{{entry.entry_id}}</td>
 	            <td>{{entry.entry_name}}</td>
+				<td>{{entry.athlete_sex}}</td>	         
 	            <td>{{entry.race_id}}</td>
 	            <td>{{entry.race_name}}</td>
 	          </tr>

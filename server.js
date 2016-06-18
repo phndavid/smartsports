@@ -21,7 +21,8 @@ var user_pass = "c16975b43862ff2fe4537d7eee5566af7b80f9d5";
 var hostname = "https://api.chronotrack.com:443";
 var event_id = "7849";
 var query_event = "/api/event/"+event_id+"?format=json&client_id="+client_id+"&user_id="+user_id+"&user_pass="+user_pass;
-var query_users = "/api/event/"+event_id+"/entry?format=json&client_id="+client_id+"&user_id="+user_id+"&user_pass="+user_pass;
+var query_users = "/api/event/"+event_id+"/entry?format=json&client_id="+client_id+"&user_id="+user_id+"&user_pass="+user_pass+"&size=1600&include_test_entries=true&elide_json=false;";
+var query_result = "/api/event/"+event_id+"/results?format=json&client_id="+client_id+"&user_id="+user_id+"&user_pass="+user_pass+"&size=1600&include_test_entries=true&elide_json=false;"
 
 app.get('/event', function(req, res) {
     var url = hostname+query_event;
@@ -32,9 +33,17 @@ app.get('/event', function(req, res) {
        res.json(body);
      });   
 });
-
 app.get('/event/users', function(req, res) {
     var urls = hostname+query_users;
+    console.log(urls);
+    // request module is used to process the chrotrack url and return the results in JSON format
+     request(urls, function(err, resp, body) {
+       body = JSON.parse(body);
+       res.json(body);
+     });   
+});
+app.get('/event/users/results', function(req, res) {
+    var urls = hostname+query_result;
     console.log(urls);
     // request module is used to process the chrotrack url and return the results in JSON format
      request(urls, function(err, resp, body) {
