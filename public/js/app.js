@@ -5,13 +5,16 @@ angular.module('app', ['ngRoute'])
             .when('/Overall',{
             	templateUrl: 'views/overall.html'
             })
+            .when('/Top10',{
+              templateUrl: 'views/topten.html'
+            })
             .when('/Stage/:stageId',{
             	templateUrl: 'views/stage.html',
             })
             .otherwise({
 		      redirectTo: 'Overall'
 		   	});
-         	$locationProvider.html5Mode(true);
+         //	$locationProvider.html5Mode(true);
  }])
 .factory('StageFactory', function($http){
   return {
