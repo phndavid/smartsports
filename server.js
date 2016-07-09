@@ -2,6 +2,7 @@ var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
 var request = require('request');
+//var Event = require("./model/event").Event;
 var port = process.env.OPENSHIFT_NODEJS_PORT || 8080;
 var ipaddress = process.env.OPENSHIFT_NODEJS_IP;
 if (typeof ipaddress === "undefined") {
@@ -19,10 +20,11 @@ var client_id = "727dae7f";
 var user_id = "afguzmans3%40gmail.com";
 var user_pass = "c16975b43862ff2fe4537d7eee5566af7b80f9d5";
 var hostname = "https://api.chronotrack.com:443";
-var event_id = "7849";
+var event_id = "22643";
 var query_event = "/api/event/"+event_id+"?format=json&client_id="+client_id+"&user_id="+user_id+"&user_pass="+user_pass;
 var query_users = "/api/event/"+event_id+"/entry?format=json&client_id="+client_id+"&user_id="+user_id+"&user_pass="+user_pass+"&size=1600&include_test_entries=true&elide_json=false;";
 var query_result = "/api/event/"+event_id+"/results?format=json&client_id="+client_id+"&user_id="+user_id+"&user_pass="+user_pass+"&size=1600&include_test_entries=true&elide_json=false;"
+
 
 app.get('/event', function(req, res) {
     var url = hostname+query_event;

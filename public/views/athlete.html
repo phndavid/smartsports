@@ -1,0 +1,26 @@
+<div class="container" style="background:#fff; padding:10px;" ng-controller="EventCtrl">
+	<div class="row">	
+	    <div class="col s12">
+    	  <table class="striped">
+	        <thead>
+	          <tr>
+	          	<th data-field="id">Rank</th>
+	            <th data-field="id">Riders</th>
+	            <th data-field="name">Riders No</th>
+   	            <th data-field="name">Time</th>   	          
+	            <th data-field="price">Bracket</th>	            	           
+	          </tr>
+	        </thead>
+	        <tbody>
+	          <tr ng-repeat="entry in event_users.event_entry">        
+	            <td>{{entry.entry_id}}</td>
+	            <td>{{entry.entry_name}}</td>
+				<td>{{entry.athlete_sex}}</td>	         
+	            <td>{{entry.race_id}}</td>
+	            <td>{{entry.race_name}}</td>
+	          </tr>
+	        </tbody>
+	      </table>
+	    </div>
+    </div>
+</div>

@@ -2,50 +2,49 @@
 <html ng-app="app">
 <head>
     <meta charset="utf-8">
-    <title>Clasificación general</title>
+    <title>The Legend of El Dorado:: Overall Standing Clasifications</title>
     <!--Import Google Icon Font-->
     <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 	<!--Import materialize.css-->
 	<link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+	<link type="text/css" rel="stylesheet" href="css/style.css"  media="screen,projection"/>
+	<link rel="icon" type="image/png" href="/img/favicon.png">
 	<!--Let browser know website is optimized for mobile-->
 	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	<base href="/">
 </head>
 <body>
-	<div class="container" ng-controller="EventCtrl">
-    	<h2>Clasificación general</h2>
-    	<p><b>Event Id:</b><span> {{event.event.event_id}}</span></p>
-    	<p><b>Event Name:</b><span> {{event.event.event_name}}</span></p>
-		<p><b>Event Description:</b><span> {{event.event.event_description}}</span></p>
-    	  <table class="striped">
-	        <thead>
-	          <tr>
-	          	<th data-field="id">#</th>
-	            <th data-field="id">Entry Id</th>
-	            <th data-field="name">Entry Name</th>
-   	            <th data-field="name">Sex</th>   	          
-	            <th data-field="price">Race Id</th>
-	            <th data-field="price">Race Name</th>	            
-	          </tr>
-	        </thead>
-
-	        <tbody>
-	          <tr ng-repeat="entry in event_users.event_entry">
-	           	<td>{{$index+1}}</td>	        
-	            <td>{{entry.entry_id}}</td>
-	            <td>{{entry.entry_name}}</td>
-				<td>{{entry.athlete_sex}}</td>	         
-	            <td>{{entry.race_id}}</td>
-	            <td>{{entry.race_name}}</td>
-	          </tr>
-	        </tbody>
-	      </table>
-    </div>
+	<div class="container">
+		<div  style="background: #ffa93a;height:150px; padding: 10px;">
+			<div style="float: left;">
+				<h4 style="margin-bottom: 0px;">Overall Standing Clasifications</h4>
+	    		<span>31 JULY to 6 AUGUST 2016 – 7 stages | 600 km + | 18,000 m</span>    	
+			</div>
+	    	<img style="height:100px; float: right; margin-top: 10px;"src="./img/logo_legend.png">    	
+	    </div>
+	    <div>
+	     <nav style="background: #a76a3c;">
+				      <div class="nav-wrapper">		     
+				        <ul class="hide-on-med-and-down">
+				          	<li class="active"><a href="Athlete">Athletes</a></li>
+				    		<li><a href="Stage/1">Stage 1</a></li>
+				    		<li><a href="Stage/2">Stage 2</a></li>
+				    		<li><a href="Stage/3">Stage 3</a></li>
+				    		<li><a href="Stage/4">Stage 4</a></li>
+				    		<li><a href="Stage/5">Stage 5</a></li>
+				    		<li><a href="Stage/6">Stage 6</a></li>
+				    		<li><a href="Stage/7">Stage 7</a></li>
+				        </ul>
+				      </div>
+			</nav>
+		</div>
+	</div>
+	<div ng-view></div>
     <!--Import jQuery before materialize.js-->
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-    <script type="text/javascript" src="js/materialize.min.js"></script>
+    <!--script type="text/javascript" src="js/materialize.min.js"></script-->
     <!-- AngularJS -->
     <script type="text/javascript" src="lib/angular.min.js"></script>
-    <script type="text/javascript" src="lib/angular-resource.min.js"></script>
     <script type="text/javascript" src="lib/angular-route.min.js"></script>
     <script type="text/javascript" src="js/app.js"></script>
 </body>

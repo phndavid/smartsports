@@ -1,0 +1,18 @@
+ @font-face{ 
+    font-family: Raleway; 
+    src: url('../font/Raleway-Regular.ttf');
+ }
+ @font-face{ 
+    font-family: DINPro; 
+    src: url('../font/DINPro-Cond.woff');
+ }
+ 
+body{
+	background: url(../img/bg_overall.jpg) fixed;
+    background-color: #fff;
+    background-position: center top;
+    background-repeat: no-repeat;
+    padding: 0px;
+    margin: 0px auto;
+    font-family: DINPro;
+}
