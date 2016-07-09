@@ -6,11 +6,12 @@ console.log("Connect....")
 var event_schema = new Schema({
    id : Number,
    name: String,
-   city: String,
-   date: Date,
    description: String,
-   hourStart: Number,
-   hourEnd: Number,
+   city: String,
+   startTime: Date,
+   finishTime: Date,
+   siteURI: String, 
+   organizationName: String
 });
 
 var Event = mongoose.model("Event", event_schema);
