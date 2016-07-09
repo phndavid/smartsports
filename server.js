@@ -2,7 +2,8 @@ var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
 var request = require('request');
-//var Event = require("./model/event").Event;
+var Event = require("./models/event.js");
+console.log("El evento: " + Event);
 var port = process.env.OPENSHIFT_NODEJS_PORT || 8080;
 var ipaddress = process.env.OPENSHIFT_NODEJS_IP;
 if (typeof ipaddress === "undefined") {
