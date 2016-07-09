@@ -4,16 +4,16 @@ var connection_string = '127.3.106.1:27017';
 mongoose.connect("mongodb://"+connection_string+"/events");
 console.log("Connect....")
 var event_schema = new Schema({
-   id : Number,
+   id : String,
    name: String,
    description: String,
-   city: String,
+   country: String,
    startTime: Date,
-   finishTime: Date,
+   endTime: Date,
    siteURI: String, 
    organizationName: String
 });
 
 var Event = mongoose.model("Event", event_schema);
 
-module.exports.Event = Event;
+module.exports = Event;

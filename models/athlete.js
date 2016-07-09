@@ -12,6 +12,6 @@ var athlete_schema = new Schema({
 	sex: String,
 });
 
-var Athlete = mongoose.model("Athlete", event_schema);
+var Athlete = mongoose.model("Athlete", athlete_schema);
 
 module.exports.Athlete = Athlete;
