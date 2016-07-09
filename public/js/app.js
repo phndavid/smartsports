@@ -2,14 +2,14 @@ angular.module('app', ['ngRoute'])
 .config(['$routeProvider', '$locationProvider',
   function($routeProvider, $locationProvider) {
          $routeProvider
-            .when('/Athlete',{
-            	templateUrl: 'views/athlete.html'
+            .when('/Overall',{
+            	templateUrl: 'views/overall.html'
             })
             .when('/Stage/:stageId',{
             	templateUrl: 'views/stage.html',
             })
             .otherwise({
-		      redirectTo: 'Athlete'
+		      redirectTo: 'Overall'
 		   	});
          	$locationProvider.html5Mode(true);
  }])
@@ -23,8 +23,8 @@ angular.module('app', ['ngRoute'])
 .controller('StageCtrl', function($scope, $routeParams, StageFactory) {
   this.name = "StageCtrl";
   this.params = $routeParams;
-   $scope.event_users_results = [];
-
+  console.log(this.params);
+  $scope.event_users_results = [];
     var handleSuccess = function(data, status) {
         $scope.event_users_results = data;
         console.log($scope.event_users_results);

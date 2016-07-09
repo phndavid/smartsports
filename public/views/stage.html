@@ -15,9 +15,9 @@
 	        <tbody>
 	          <tr ng-repeat="stage in event_users_results.event_results">        
 	            <td>{{stage.results_rank}}</td>
-	            <td>{{stage.entry_name}}</td>
+	            <td>{{stage.results_first_name}} {{stage.results_last_name}}</td>
 				<td>{{stage.results_bib}}</td>	         
-	            <td>{{stage.race_id}}</td>
+	            <td>{{stage.results_time}}</td>
 	            <td>{{stage.results_bracket_name}}</td>
 	          </tr>
 	        </tbody>
