@@ -30,14 +30,14 @@ var query_event = "/api/event/"+event_id+"?format=json&client_id="+client_id+"&u
 var query_users = "/api/event/"+event_id+"/entry?format=json&client_id="+client_id+"&user_id="+user_id+"&user_pass="+user_pass+"&size=1600&include_test_entries=true&elide_json=false;";
 var query_result = "/api/event/"+event_id+"/results?format=json&client_id="+client_id+"&user_id="+user_id+"&user_pass="+user_pass+"&size=1600&include_test_entries=true&elide_json=false;";
 var query_race = "/api/event/"+event_id+"/race?format=json&client_id="+client_id+"&user_id="+user_id+"&user_pass="+user_pass+"&page=1&size=50&include_not_wants_results=true";
-var event, race;
+
+var event;
 //Se registra el evento
 function getEvent(){
-    console.log("se ejecuta")
     var url = hostname+query_event;
+  
       request(url, function(err, resp, body) {
         body = JSON.parse(body);
-        console.log(body)
         event = body.event;
         registerEvent(event);
       });      
@@ -67,6 +67,48 @@ function registerEvent(event){
     }
   });
 }
+getEvent();
+
+
+//Se registran los atletas
+var athletes = [];
+function getAtletas(){
+    var urls = hostname+query_users;
+    // request module is used to process the chrotrack url and return the results in JSON format
+     request(urls, function(err, resp, body) {
+       body = JSON.parse(body);
+       console.log(body.event_entry);
+       athletes = body.event_entry;
+       registerAthletes();
+     });   
+
+}
+function registerAthletes(){
+  Athlete.find({},function(err,athls){
+    if(err){
+      console.log("algo paso");
+    }else{
+      if(athls.length==0){
+        athletes.forEach(function(value,index){
+          var newAthlete = Athlete({
+            id: value.athlete_id, 
+            name: value.entry_name,
+            status: value.entry_status,
+            age: 15,
+            number: 15, 
+            sex: value.athlete_sex
+          });
+          newAthlete.save(function(err){
+            if(err){
+              console.log("algo paso: " + err);
+            }
+          });
+        });
+      }
+    }
+  });
+}
+getAtletas();
 // Se registran las carreras
 function getRace(){
 var url = hostname+query_race;
@@ -77,10 +119,6 @@ var url = hostname+query_race;
         registerRace(race);
       }); 
 }
-function registerRace(race){
-
-}
-// API 
 app.get('/event', function(req, res) {
     var url = hostname+query_event;
     console.log(url);
@@ -109,7 +147,5 @@ app.get('/event/users/results', function(req, res) {
      });   
 });
 app.listen(port, ipaddress, function() {
-    getEvent();
-    getRace();
     console.log('%s: Node server started on %s:%d ...', Date(Date.now() ), ipaddress, port);
  });
