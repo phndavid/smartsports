@@ -29,13 +29,12 @@ var event_id = "22643";
 var query_event = "/api/event/"+event_id+"?format=json&client_id="+client_id+"&user_id="+user_id+"&user_pass="+user_pass;
 var query_users = "/api/event/"+event_id+"/entry?format=json&client_id="+client_id+"&user_id="+user_id+"&user_pass="+user_pass+"&size=1600&include_test_entries=true&elide_json=false;";
 var query_result = "/api/event/"+event_id+"/results?format=json&client_id="+client_id+"&user_id="+user_id+"&user_pass="+user_pass+"&size=1600&include_test_entries=true&elide_json=false;";
-
-var event;
+var query_race = "/api/event/"+event_id+"/race?format=json&client_id="+client_id+"&user_id="+user_id+"&user_pass="+user_pass+"&page=1&size=50&include_not_wants_results=true";
+var event, race;
 //Se registra el evento
 function getEvent(){
     console.log("se ejecuta")
     var url = hostname+query_event;
-  
       request(url, function(err, resp, body) {
         body = JSON.parse(body);
         console.log(body)
@@ -68,12 +67,20 @@ function registerEvent(event){
     }
   });
 }
-getEvent();
+// Se registran las carreras
+function getRace(){
+var url = hostname+query_race;
+      request(url, function(err, resp, body) {
+        body = JSON.parse(body);
+        console.log(body)
+        race = body.event_race;
+        registerRace(race);
+      }); 
+}
+function registerRace(race){
 
-
-//Se registran los atletas
-
-
+}
+// API 
 app.get('/event', function(req, res) {
     var url = hostname+query_event;
     console.log(url);
@@ -102,5 +109,7 @@ app.get('/event/users/results', function(req, res) {
      });   
 });
 app.listen(port, ipaddress, function() {
+    getEvent();
+    getRace();
     console.log('%s: Node server started on %s:%d ...', Date(Date.now() ), ipaddress, port);
  });
