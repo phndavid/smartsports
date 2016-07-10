@@ -35,7 +35,6 @@ var event;
 //Se registra el evento
 function getEvent(){
     var url = hostname+query_event;
-  
       request(url, function(err, resp, body) {
         body = JSON.parse(body);
         event = body.event;
@@ -67,8 +66,6 @@ function registerEvent(event){
     }
   });
 }
-getEvent();
-
 
 //Se registran los atletas
 var athletes = [];
@@ -77,7 +74,6 @@ function getAtletas(){
     // request module is used to process the chrotrack url and return the results in JSON format
      request(urls, function(err, resp, body) {
        body = JSON.parse(body);
-       console.log(body.event_entry);
        athletes = body.event_entry;
        registerAthletes();
      });   
@@ -108,16 +104,46 @@ function registerAthletes(){
     }
   });
 }
-getAtletas();
+
 // Se registran las carreras
+var races = [];
 function getRace(){
 var url = hostname+query_race;
       request(url, function(err, resp, body) {
         body = JSON.parse(body);
         console.log(body)
-        race = body.event_race;
-        registerRace(race);
+        races = body.event_race;
+        registerRace(races);
       }); 
+}
+function registerRace(race){
+   Race.find({},function(err,racs){
+    if(err){
+      console.log("algo paso");
+    }else{
+      if(racs.length==0){
+        races.forEach(function(value,index){
+          var newRace = Race({
+            id: value.race_id,
+            name: value.race_name,
+            type: value.race_type,
+            subType: value.race_subtype,
+            distance: value.race_course_distance,
+            distanceUnit: value.race_pref_distance_unit, 
+            plannedStartTime: new Date(Number(value.race_planned_start_time)*1000),
+            plannedFinishTime: new Date(Number(value.race_planned_end_time)*1000),
+            raceActualStartTime: new Date(Number(value.race_actual_end_time)*1000), 
+            raceActualFinishTime: new Date(Number(value.race_age_ref_time)*1000)
+          });
+          newRace.save(function(err){
+            if(err){
+              console.log("algo paso: " + err);
+            }
+          });
+        });
+      }
+    }
+  });
 }
 app.get('/event', function(req, res) {
     var url = hostname+query_event;
@@ -147,5 +173,8 @@ app.get('/event/users/results', function(req, res) {
      });   
 });
 app.listen(port, ipaddress, function() {
+  getEvent();
+  getAtletas();
+  getRace();
     console.log('%s: Node server started on %s:%d ...', Date(Date.now() ), ipaddress, port);
  });
