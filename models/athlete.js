@@ -1,10 +1,8 @@
 var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
-
-
 //pendiente modelar tiempos por carrera y en total
 var athlete_schema = new Schema({
-	id: Number,
+	id: String,
 	name: String,
 	status: String,
 	age: Number,
@@ -14,4 +12,4 @@ var athlete_schema = new Schema({
 
 var Athlete = mongoose.model("Athlete", athlete_schema);
 
-module.exports.Athlete = Athlete;
+module.exports = Athlete;

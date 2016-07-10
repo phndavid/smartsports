@@ -33,12 +33,10 @@ var query_result = "/api/event/"+event_id+"/results?format=json&client_id="+clie
 var event;
 //Se registra el evento
 function getEvent(){
-    console.log("se ejecuta")
     var url = hostname+query_event;
   
       request(url, function(err, resp, body) {
         body = JSON.parse(body);
-        console.log(body)
         event = body.event;
         registerEvent(event);
       });      
@@ -72,7 +70,44 @@ getEvent();
 
 
 //Se registran los atletas
+var athletes = [];
+function getAtletas(){
+    var urls = hostname+query_users;
+    // request module is used to process the chrotrack url and return the results in JSON format
+     request(urls, function(err, resp, body) {
+       body = JSON.parse(body);
+       console.log(body.event_entry);
+       athletes = body.event_entry;
+       registerAthletes();
+     });   
 
+}
+function registerAthletes(){
+  Athlete.find({},function(err,athls){
+    if(err){
+      console.log("algo paso");
+    }else{
+      if(athls.length==0){
+        athletes.forEach(function(value,index){
+          var newAthlete = Athlete({
+            id: value.athlete_id, 
+            name: value.entry_name,
+            status: value.entry_status,
+            age: 15,
+            number: 15, 
+            sex: value.athlete_sex
+          });
+          newAthlete.save(function(err){
+            if(err){
+              console.log("algo paso: " + err);
+            }
+          });
+        });
+      }
+    }
+  });
+}
+getAtletas();
 
 app.get('/event', function(req, res) {
     var url = hostname+query_event;

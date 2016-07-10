@@ -16,4 +16,4 @@ var race_schema = new Schema({
 
 var Race = mongoose.model("Race", race_schema);
 
-module.exports.Race = Race;
+module.exports = Race;
