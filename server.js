@@ -69,12 +69,27 @@ function registerEvent(event){
 
 //Se registran los atletas
 var athletes = [];
+function checkRepitedAthletes(arrayAthletes) {
+  for(var i=0; i<arrayAthletes.length;i++){
+    if(arrayAthletes[i]!=undefined){
+      arrayAthletes[i].races = [];
+      arrayAthletes[i].races.push(arrayAthletes[i].race_name);
+      for(var j=i+1;j<arrayAthletes.length;j++){
+        if(arrayAthletes[j]!=undefined && (arrayAthletes[i].entry_name == arrayAthletes[j].entry_name)){
+          arrayAthletes[i].races.push(arrayAthletes[j].race_name);
+          delete arrayAthletes[j];      
+        }
+      }
+    }
+  }
+}
 function getAtletas(){
     var urls = hostname+query_users;
     // request module is used to process the chrotrack url and return the results in JSON format
      request(urls, function(err, resp, body) {
        body = JSON.parse(body);
        athletes = body.event_entry;
+       checkRepitedAthletes(athletes);
        registerAthletes();
      });   
 
@@ -92,7 +107,8 @@ function registerAthletes(){
             status: value.entry_status,
             age: 15,
             number: 15, 
-            sex: value.athlete_sex
+            sex: value.athlete_sex, 
+            races: value.races
           });
           newAthlete.save(function(err){
             if(err){
@@ -111,7 +127,6 @@ function getRace(){
 var url = hostname+query_race;
       request(url, function(err, resp, body) {
         body = JSON.parse(body);
-        console.log(body)
         races = body.event_race;
         registerRace(races);
       }); 
@@ -145,8 +160,24 @@ function registerRace(race){
     }
   });
 }
-app.get('/event', function(req, res) {
-    var url = hostname+query_event;
+
+//funciones
+
+//overall standing
+
+function overallStanding(){
+
+}
+
+//stage
+
+function stage(id){
+
+}
+
+//HTTP Get Call for the overall standing
+app.get('/overall', function(req, res) {
+    var url = hostname+query_result;
     console.log(url);
     // request module is used to process the chrotrack url and return the results in JSON format
      request(url, function(err, resp, body) {
@@ -154,7 +185,9 @@ app.get('/event', function(req, res) {
        res.json(body);
      });   
 });
-app.get('/event/users', function(req, res) {
+
+//HTTP Get call for the 7 stages 
+app.get('/stage', function(req, res) {
     var urls = hostname+query_users;
     console.log(urls);
     // request module is used to process the chrotrack url and return the results in JSON format
@@ -163,18 +196,10 @@ app.get('/event/users', function(req, res) {
        res.json(body);
      });   
 });
-app.get('/event/users/results', function(req, res) {
-    var urls = hostname+query_result;
-    console.log(urls);
-    // request module is used to process the chrotrack url and return the results in JSON format
-     request(urls, function(err, resp, body) {
-       body = JSON.parse(body);
-       res.json(body);
-     });   
-});
+
 app.listen(port, ipaddress, function() {
   getEvent();
   getAtletas();
   getRace();
-    console.log('%s: Node server started on %s:%d ...', Date(Date.now() ), ipaddress, port);
+  console.log('%s: Node server started on %s:%d ...', Date(Date.now() ), ipaddress, port);
  });
