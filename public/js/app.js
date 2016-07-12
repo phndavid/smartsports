@@ -16,35 +16,26 @@ angular.module('app', ['ngRoute'])
 		   	});
          //	$locationProvider.html5Mode(true);
  }])
-.factory('StageFactory', function($http){
+.factory('OverallFactory', function($http){
   return {
   	getResults: function(){
-  		return $http.get("/event/users/results");
+  		return $http.get("/Overall");
   	} 
   };
 })
-.controller('StageCtrl', function($scope, $routeParams, $http, StageFactory) {
+.controller('StageCtrl', function($scope, $routeParams, $http) {
   this.name = "StageCtrl";
   this.params = $routeParams;
+  $http.get("/Stage?id="+this.params)
+    .then(function(response) {
+        $scope.stage_result = response.data;
+  });
+})
+.controller('OverallCtrl', function($scope, $http, OverallFactory){
   $scope.event_users_results = [];
     var handleSuccess = function(data, status) {
         $scope.event_users_results = data;
         console.log($scope.event_users_results);
     };
-  StageFactory.getResults().success(handleSuccess);
-  $http.get("/Stage?id="+this.params)
-    .then(function(response) {
-        $scope.stage_result = response.data;
-  });
-
-})
-.controller('EventCtrl', function($scope, $http){
-	$http.get("/event")
-    .then(function(response) {
-        $scope.event = response.data;
-    });
-    $http.get("/event/users")
-    .then(function(response) {
-        $scope.event_users = response.data;
-    });
+  OverallFactory.getResults().success(handleSuccess);
 })
