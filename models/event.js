@@ -14,6 +14,15 @@ var event_schema = new Schema({
    organizationName: String
 });
 
+
+event_schema.methods.getName = function(){
+	return this.name;
+}
+
 var Event = mongoose.model("Event", event_schema);
+
+
+
+
 
 module.exports = Event;

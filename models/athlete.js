@@ -8,6 +8,7 @@ var athlete_schema = new Schema({
 	age: Number,
 	number: Number,
 	sex: String,
+	races: []
 });
 
 var Athlete = mongoose.model("Athlete", athlete_schema);
