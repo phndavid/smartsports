@@ -23,16 +23,20 @@ angular.module('app', ['ngRoute'])
   	} 
   };
 })
-.controller('StageCtrl', function($scope, $routeParams, StageFactory) {
+.controller('StageCtrl', function($scope, $routeParams, $http, StageFactory) {
   this.name = "StageCtrl";
   this.params = $routeParams;
-  console.log(this.params);
   $scope.event_users_results = [];
     var handleSuccess = function(data, status) {
         $scope.event_users_results = data;
         console.log($scope.event_users_results);
     };
   StageFactory.getResults().success(handleSuccess);
+  $http.get("/Stage?id="+this.params)
+    .then(function(response) {
+        $scope.stage_result = response.data;
+  });
+
 })
 .controller('EventCtrl', function($scope, $http){
 	$http.get("/event")
