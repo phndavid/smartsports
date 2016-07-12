@@ -25,8 +25,8 @@ angular.module('app', ['ngRoute'])
 })
 .controller('StageCtrl', function($scope, $routeParams, $http) {
   this.name = "StageCtrl";
-  this.params = $routeParams;
-  $http.get("/Stage?id="+this.params)
+  var race_id = $routeParams;
+  $http.get("/Stage?id="+race_id.stageId)
     .then(function(response) {
         $scope.stage_result = response.data;
   });
