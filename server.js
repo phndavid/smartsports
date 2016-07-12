@@ -173,7 +173,8 @@ function overallStanding(){
 
 function getStageStanding(id){
   console.log(id);
-  var query_result_by_race = "/api/event/"+event_id+"/"
+  var id = races[id];
+  var query_result_by_race = "/api/race/"+id+"results?format=json&client_id="+client_id+"&user_id="+user_id&+"user_pass="+user_pass+"page=1&size=1600"
 
 }
 
