@@ -12,8 +12,8 @@ angular.module('app', ['ngRoute'])
             	templateUrl: 'views/stage.html',
             })
             .otherwise({
-		      redirectTo: 'Overall'
-		   	});
+		          redirectTo: 'Overall'
+		        });
          //	$locationProvider.html5Mode(true);
  }])
 .factory('OverallFactory', function($http){

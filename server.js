@@ -197,7 +197,7 @@ function processRaceResults(theResults){
       riders: theResults[index].results_first_name + " - " + theResults[index].results_last_name,
       riders_no: theResults[index].results_bib,
       time: theResults[index].results_time_with_penalty,
-      bracket: theResults[index].results_bracket_name
+      bracket: theResults[index].results_primary_bracket_name
     }
   });
   return objectToSend;
