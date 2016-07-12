@@ -29,6 +29,7 @@ angular.module('app', ['ngRoute'])
   $http.get("/Stage?id="+race_id.stageId)
     .then(function(response) {
         $scope.stage_result = response.data;
+        console.log($scope.stage_result)
   });
 })
 .controller('OverallCtrl', function($scope, $http, OverallFactory){

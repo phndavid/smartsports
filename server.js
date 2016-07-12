@@ -30,6 +30,7 @@ var query_event = "/api/event/"+event_id+"?format=json&client_id="+client_id+"&u
 var query_users = "/api/event/"+event_id+"/entry?format=json&client_id="+client_id+"&user_id="+user_id+"&user_pass="+user_pass+"&size=1600&include_test_entries=true&elide_json=false;";
 var query_result = "/api/event/"+event_id+"/results?format=json&client_id="+client_id+"&user_id="+user_id+"&user_pass="+user_pass+"&size=1600&include_test_entries=true&elide_json=false;";
 var query_race = "/api/event/"+event_id+"/race?format=json&client_id="+client_id+"&user_id="+user_id+"&user_pass="+user_pass+"&page=1&size=50&include_not_wants_results=true";
+//var query_result_by_race = "/api/race/"+race_id+"results?format=json&client_id="+client_id+"&user_id="+user_id+"&user_pass="+user_pass+"page=1&size=1600&mode=ctlive";
 
 var event;
 //Se registra el evento
@@ -171,11 +172,35 @@ function overallStanding(){
 
 //stage
 
-function getStageStanding(id){
-  console.log(id);
-  var id = races[id];
-  var query_result_by_race = "/api/race/"+id+"results?format=json&client_id="+client_id+"&user_id="+user_id&+"user_pass="+user_pass+"page=1&size=1600"
+function getStageStanding(id,res){
+  var race_id = races[id].race_id;
+  console.log(client_id)
+  var query_result_by_race = "/api/race/"+race_id+"/results?format=json&client_id="+client_id+"&user_id="+user_id+"&user_pass="+user_pass+"&page=1&size=1600&mode=ctlive";
+  var uri_crhono = hostname+query_result_by_race;
+  console.log("Este es el query_result: " + query_result_by_race)
+  request(uri_crhono,function(err,resp,body){
+    console.log("entra")
+    body = JSON.parse(body);
+    console.log(body.race_results)
+    var theResults = body.race_results; 
+    var JSONToSend = processRaceResults(theResults);
+    res.json(JSONToSend);
+  });
 
+}
+
+function processRaceResults(theResults){
+  var objectToSend = []; 
+  theResults.forEach(function(value,index){
+    objectToSend[index] = {
+      rank: theResults[index].results_rank,
+      riders: theResults[index].results_first_name + " - " + theResults[index].results_last_name,
+      riders_no: theResults[index].results_bib,
+      time: theResults[index].results_time_with_penalty,
+      bracket: theResults[index].results_bracket_name
+    }
+  });
+  return objectToSend;
 }
 
 //HTTP Get Call for the overall standing
@@ -192,14 +217,10 @@ app.get('/overall', function(req, res) {
 //HTTP Get call for the 7 stages 
 app.get('/Stage', function(req, res) {
     var urls = hostname+query_race;
-    var rade_id = req.query.id;
-    console.log(rade_id);
-    getStageStanding(req.query.id - 1);
-    // request module is used to process the chrotrack url and return the results in JSON format
-     request(urls, function(err, resp, body) {
-       body = JSON.parse(body);
-       res.json(body);
-     });   
+    var index = req.query.id;
+    console.log("Este es el id que llega por GET: " + index);
+    getStageStanding(index - 1,res);
+      
 });
 
 app.listen(port, ipaddress, function() {

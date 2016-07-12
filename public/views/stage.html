@@ -13,12 +13,12 @@
 	        </thead>
 
 	        <tbody>
-	          <tr ng-repeat="stage in stage_result.event_results">        
-	            <td>{{stage.results_rank}}</td>
-	            <td>{{stage.results_first_name}} {{stage.results_last_name}}</td>
-				<td>{{stage.results_bib}}</td>	         
-	            <td>{{stage.results_time}}</td>
-	            <td>{{stage.results_bracket_name}}</td>
+	          <tr ng-repeat="stage in stage_result">        
+	            <td>{{stage.rank}}</td>
+	            <td>{{stage.riders}}</td>
+				<td>{{stage.riders_no}}</td>	         
+	            <td>{{stage.time}}</td>
+	            <td>{{stage.bracket}}</td>
 	          </tr>
 	        </tbody>
 	      </table>
