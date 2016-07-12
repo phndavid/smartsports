@@ -171,7 +171,9 @@ function overallStanding(){
 
 //stage
 
-function stage(id){
+function getStageStanding(id){
+  console.log(id);
+  var query_result_by_race = "/api/event/"+event_id+"/"
 
 }
 
@@ -187,9 +189,10 @@ app.get('/overall', function(req, res) {
 });
 
 //HTTP Get call for the 7 stages 
-app.get('/stage', function(req, res) {
+app.get('/Stage', function(req, res) {
     var urls = hostname+query_users;
     console.log(urls);
+    getStageStanding(req.query.id - 1);
     // request module is used to process the chrotrack url and return the results in JSON format
      request(urls, function(err, resp, body) {
        body = JSON.parse(body);
