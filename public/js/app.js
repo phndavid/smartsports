@@ -16,13 +16,6 @@ angular.module('app', ['ngRoute'])
 		        });
          //	$locationProvider.html5Mode(true);
  }])
-.factory('OverallFactory', function($http){
-  return {
-  	getResults: function(){
-  		return $http.get("/Overall");
-  	} 
-  };
-})
 .controller('StageCtrl', function($scope, $routeParams, $http) {
   this.name = "StageCtrl";
   var race_id = $routeParams;
@@ -32,11 +25,13 @@ angular.module('app', ['ngRoute'])
         console.log($scope.stage_result)
   });
 })
-.controller('OverallCtrl', function($scope, $http, OverallFactory){
-  $scope.event_users_results = [];
-    var handleSuccess = function(data, status) {
-        $scope.event_users_results = data;
-        console.log($scope.event_users_results);
-    };
-  OverallFactory.getResults().success(handleSuccess);
+.controller('OverallCtrl', function($scope, $http){
+  $("#select").on('change', function() {
+    var value = $(this).children(":selected").attr("value");
+    console.log(value);
+    $http.get("/Overall?bracket="+value)
+    .then(function(response) {
+        console.log(response.data);
+  });
+  });
 })
