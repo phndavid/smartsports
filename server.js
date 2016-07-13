@@ -238,24 +238,18 @@ function addTimes(totalTime,currentTime){
   var totalParts = newTotalTime.split(":");
   var totalCurrent = newCurrentTime.split(":");
 
-  var totalTimeToMillis = ((totalParts[0] * 60 * 60 ) + (totalParts[1] * 60) + (totalParts[2]))*1000;
-  var totalCurrentToMillis = ((totalCurrent[0] * 60 * 60) + (totalCurrent[1] * 60) + (totalCurrent[2]))*1000;
+  var totalTimeToSeconds = (totalParts[0] * 60 * 60 ) + (totalParts[1] * 60) + (totalParts[2]);
+  var totalCurrentToSecondos = (totalCurrent[0] * 60 * 60) + (totalCurrent[1] * 60) + (totalCurrent[2]);
 
-  var addedTime = totalCurrentToMillis + totalCurrentToMillis; 
+  var addedTime = totalCurrentToSeconds + totalCurrentToSeconds; 
 
   return msToHMS(addedTime); 
 }
-function msToHMS( ms ) {
-    // 1- Convert to seconds:
-    var seconds = ms / 1000;
-    // 2- Extract hours:
-    var hours = parseInt( seconds / 3600 ); // 3,600 seconds in 1 hour
-    seconds = seconds % 3600; // seconds remaining after extracting hours
-    // 3- Extract minutes:
-    var minutes = parseInt( seconds / 60 ); // 60 seconds in 1 minute
-    // 4- Keep only seconds not extracted to minutes:
-    seconds = seconds % 60;
-    return (hours+":"+minutes+":"+seconds);
+var secondsToHMS = function (seconds){
+    var h = Math.floor(seconds / 3600);
+    var m = Math.floor(seconds % 3600 / 60);
+    var s = Math.floor(seconds % 3600 % 60);
+    return ((h > 0 ? h + ":" : "00:") + (m < 10 ? "0" : "") + m + ":" + (s < 10 ? "0" : "") + s);
 }
 
 //stage
