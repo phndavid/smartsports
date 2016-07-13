@@ -25,7 +25,7 @@
 	    <div>
 	     <nav style="background: #a76a3c;">
 				      <div class="nav-wrapper">		     
-				        <ul class="hide-on-med-and-down">
+				        <ul class="nav hide-on-med-and-down">
 				          	<li class="active"><a href="#/Overall">Overall Standing</a></li>
 				          	<li><a href="#/Top10">Top 10</a></li>
 				    		<li><a href="#/Stage/1">Stage 1</a></li>
@@ -44,6 +44,13 @@
     <!--Import jQuery before materialize.js-->
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script type="text/javascript" src="js/materialize.min.js"></script>
+    <script type="text/javascript">
+				var selector = '.nav li';
+				$(selector).on('click', function(){
+				    $(selector).removeClass('active');
+				    $(this).addClass('active');
+				});
+	</script>
     <!-- AngularJS -->
     <script type="text/javascript" src="lib/angular.min.js"></script>
     <script type="text/javascript" src="lib/angular-route.min.js"></script>
