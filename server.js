@@ -103,13 +103,12 @@ function registerAthletes(){
       if(athls.length==0){
         athletes.forEach(function(value,index){
           var newAthlete = Athlete({
-            id: value.athlete_id, 
-            name: value.entry_name,
-            status: value.entry_status,
-            age: 15,
-            number: 15, 
-            sex: value.athlete_sex, 
-            races: value.races
+            athlete_id: value.athlete_id, 
+            entry_name: value.entry_name,
+            entry_status: value.entry_status,
+            entry_bib: value.entry_bib, 
+            races: value.races,
+            bracket_name: value.bracket_name
           });
           newAthlete.save(function(err){
             if(err){
@@ -165,9 +164,98 @@ function registerRace(race){
 //funciones
 
 //overall standing
+function overallStanding(bracket){
+  var theBracket = bracket.replace(" ","%20")
+  var query_results_total = "/api/event/"+event_id+"/results?format=json&client_id="+client_id+"&user_id="+user_id+"&user_pass="+user_pass+"&page=1&size=1600";
+  var query_results_total_with_bracket = "/api/event/"+event_id+"/results?format=json&client_id="+client_id+"&user_id="+user_id+"&user_pass="+user_pass+"&page=1&size=1600&bracket="+theBracket;
+  if(bracket=="overall"){
+    console.log("entra al if bracket overall")
+    var uri_crhono = hostname + query_results_total;
+    request(uri_crhono,function(err,resp,body){
+      body = JSON.parse(body);
+      var theTotalResults = body.event_results; 
+      var JSONTosend = processTotalResult(theTotalResults);
+      console.log(JSONTosend)
+    });
+  }else{
+    var uri_crhono_bracket = hostname + query_results_total_with_bracket;
+    request(uri_crhono_bracket,function(err,resp,body){
+      body = JSON.parse(body);
+      console.log(body.event_results);
+      var theTotalResults = body.event_results; 
+      var JSONTosend = processTotalResult(theTotalResults);
+    });
+  }
 
-function overallStanding(){
+}
+function processTotalResult(theTotalResults){
+  var secondJSON =[]; 
+  for(var i=0; i<theTotalResults.length;i++){
+    var theName = theTotalResults[i].results_first_name + " - " + theTotalResults[i].results_last_name;
+    var search = searchAthleteInResults(secondJSON,theName); 
+    if(search.exists){
+      var totalTime = secondJSON[search.index].time;
+      var currentTime = theTotalResults[i].results_time_with_penalty;
+      secondJSON[search.index].time = addTimes(totalTime,currentTime);
+    }else{
+      console.log("deberia entrar aqui 6 veces")
+      var objectToAdd = {
+        riders: theTotalResults[i].results_first_name + " - " + theTotalResults[i].results_last_name,
+        riders_no: theTotalResults[i].results_bib,
+        time: theTotalResults[i].results_time_with_penalty,
+        gap: 0,
+        bracket: theTotalResults[i].results_primary_bracket_name
+      }
+      secondJSON.push(objectToAdd);
+    }
+  }
+  return secondJSON;
+}
+function searchAthleteInResults(theTotalResults,athleteName){
+  var theReturn = {
+    exists: false, 
+    index: -1
+  };
+  for(var i=0;i<theTotalResults.length;i++){
+    var theName = theTotalResults[i].riders;
+    if(theName==athleteName){
+      console.log("deberia entrar alguna vez")
+      theReturn =  {
+        exists: true, 
+        index: i
+      }
+      break;
+    }
+  }
+  return theReturn;
+}
+function addTimes(totalTime,currentTime){
+  var newTotalTime = totalTime.replace(".0","");
+  var newCurrentTime = currentTime.replace(".0","");
+  console.log(newTotalTime);
+  console.log(newCurrentTime)
+  
+  var totalParts = newTotalTime.split(":");
+  var totalCurrent = newCurrentTime.split(":");
 
+  var totalTimeToMillis = ((totalParts[0] * 60 * 60 ) + (totalParts[1] * 60) + (totalParts[2]))*1000;
+  var totalCurrentToMillis = ((totalCurrent[0] * 60 * 60) + (totalCurrent[1] * 60) + (totalCurrent[2]))*1000;
+
+  var addedTime = totalCurrentToMillis + totalCurrentToMillis; 
+
+  return msToHMS(addedTime); 
+}
+function msToHMS( ms ) {
+    // 1- Convert to seconds:
+    var seconds = ms / 1000;
+    // 2- Extract hours:
+    var hours = parseInt( seconds / 3600 ); // 3,600 seconds in 1 hour
+    seconds = seconds % 3600; // seconds remaining after extracting hours
+    // 3- Extract minutes:
+    var minutes = parseInt( seconds / 60 ); // 60 seconds in 1 minute
+    // 4- Keep only seconds not extracted to minutes:
+    seconds = seconds % 60;
+    return (hours+":"+minutes+":"+seconds);
 }
 
 //stage
@@ -177,9 +265,7 @@ function getStageStanding(id,res){
   console.log(client_id)
   var query_result_by_race = "/api/race/"+race_id+"/results?format=json&client_id="+client_id+"&user_id="+user_id+"&user_pass="+user_pass+"&page=1&size=1600&mode=ctlive";
   var uri_crhono = hostname+query_result_by_race;
-  console.log("Este es el query_result: " + query_result_by_race)
   request(uri_crhono,function(err,resp,body){
-    console.log("entra")
     body = JSON.parse(body);
     console.log(body.race_results)
     var theResults = body.race_results; 
@@ -204,19 +290,15 @@ function processRaceResults(theResults){
 }
 
 //HTTP Get Call for the overall standing
-app.get('/overall', function(req, res) {
-    var url = hostname+query_result;
-    console.log(url);
-    // request module is used to process the chrotrack url and return the results in JSON format
-     request(url, function(err, resp, body) {
-       body = JSON.parse(body);
-       res.json(body);
-     });   
+app.get('/Overall', function(req, res) {
+    console.log("Llego al Overall")
+    var bracket = req.query.bracket; 
+    console.log("Este es el bracket que llega por el GET: " + bracket);
+    overallStanding(bracket); 
 });
 
 //HTTP Get call for the 7 stages 
 app.get('/Stage', function(req, res) {
-    var urls = hostname+query_race;
     var index = req.query.id;
     console.log("Este es el id que llega por GET: " + index);
     getStageStanding(index - 1,res);
