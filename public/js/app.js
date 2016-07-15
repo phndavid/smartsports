@@ -26,6 +26,10 @@ angular.module('app', ['ngRoute'])
   });
 })
 .controller('OverallCtrl', function($scope, $http){
+  $http.get("/Overall?bracket=overall")
+      .then(function(response) {
+        $scope.overall_result = response.data;
+  });
   $("#select").on('change', function() {
     var value = $(this).children(":selected").attr("value");
     console.log(value);

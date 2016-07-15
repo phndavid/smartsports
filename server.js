@@ -161,9 +161,12 @@ function registerRace(race){
   });
 }
 
-//funciones
-
-//overall standing
+/** 
+  @method overallStanding
+  @description 
+  @param bracket
+  @param res
+**/
 function overallStanding(bracket,res){
   var theBracket = bracket.replace(" ","%20")
   var query_results_total = "/api/event/"+event_id+"/results?format=json&client_id="+client_id+"&user_id="+user_id+"&user_pass="+user_pass+"&page=1&size=1600";
@@ -176,21 +179,28 @@ function overallStanding(bracket,res){
       var JSONToSend = processTotalResult(theTotalResults);
       bubbleSort(JSONToSend);
       res.json(JSONToSend);
-      console.log(JSONToSend);
+      //console.log(JSONToSend);
     });
   }else{
     var uri_crhono_bracket = hostname + query_results_total_with_bracket;
+    //console.log(uri_crhono_bracket);
     request(uri_crhono_bracket,function(err,resp,body){
       body = JSON.parse(body);
-      console.log(body.event_results);
+      //console.log(body.event_results);
       var theTotalResults = body.event_results; 
-      var JSONTosend = processTotalResult(theTotalResults);
-      bubbleSort(JSONToSend);
-      res.json(JSONToSend);
+      var JSONByBracket = processTotalResult(theTotalResults);
+      bubbleSort(JSONByBracket);
+      res.json(JSONByBracket);
     });
   }
 
 }
+/** 
+  @method processTotalResult
+  @description 
+  @param theTotalResults
+  @return secondJSON
+**/
 function processTotalResult(theTotalResults){
   var secondJSON =[]; 
   for(var i=0; i<theTotalResults.length;i++){
@@ -213,6 +223,13 @@ function processTotalResult(theTotalResults){
   }
   return secondJSON;
 }
+/** 
+  @method searchAthleteInResults
+  @description 
+  @param theTotalResults
+  @param athleteName
+  @return theReturn
+**/
 function searchAthleteInResults(theTotalResults,athleteName){
   var theReturn = {
     exists: false, 
@@ -230,37 +247,57 @@ function searchAthleteInResults(theTotalResults,athleteName){
   }
   return theReturn;
 }
+/** 
+  @method bubbleSort
+  @description 
+  @param myArr
+  @return myArr
+**/
 function bubbleSort(myArr){
-  var size = myArr.length;
-  for( var pass = 1; pass < size; pass++ ){ // outer loop
-    for( var left = 0; left < (size - pass); left++){ // inner loop
-      var right = left + 1;
-      var first = HHMMSSToSeconds(myArr[left].time);
-      var next = HHMMSSToSeconds(myArr[right].time);
-      if( first > next ){
-        myArr[left].time = secondsToHMS(next);
-        myArr[right].time = secondsToHMS(first);
-      }
+  if(myArr != undefined && myArr != null){
+    var size = myArr.length;
+    for( var pass = 1; pass < size; pass++ ){ // outer loop
+        for( var left = 0; left < (size - pass); left++){ // inner loop
+          var right = left + 1;
+          var first = HHMMSSToSeconds(myArr[left].time);
+          var next = HHMMSSToSeconds(myArr[right].time);
+          if( first > next ){
+            myArr[left].time = secondsToHMS(next);
+            myArr[right].time = secondsToHMS(first);
+          }
+        }
     }
   }
- 
   return myArr;
 }
+/** 
+  @method HHMMSSToSeconds
+  @description 
+  @param time
+  @return timeToSeconds
+**/
 function HHMMSSToSeconds(time){
 
-  console.log("Lo que entra al HHMMSSToSeconds: " + time)
+  //console.log("Lo que entra al HHMMSSToSeconds: " + time)
 
   var timeSplit = time.split(":"); 
   return timeToSeconds = (+timeSplit[0]) * 60 * 60  + (+timeSplit[1]) * 60 + (+timeSplit[2]);
 
 }
+/** 
+  @method addTimes
+  @description 
+  @param totalTime
+  @param currentTime
+  @return timeToSeconds
+**/
 function addTimes(totalTime,currentTime){
   
   var newTotalTime = totalTime.replace(".0","");
   var newCurrentTime = currentTime.replace(".0","");
   
-  console.log(newTotalTime);
-  console.log(newCurrentTime);
+  //console.log(newTotalTime);
+  //console.log(newCurrentTime);
 
   var totalTimeToSeconds = HHMMSSToSeconds(newTotalTime);
   var totalCurrentToSeconds = HHMMSSToSeconds(newCurrentTime);
@@ -269,6 +306,12 @@ function addTimes(totalTime,currentTime){
 
   return secondsToHMS(addedTime); 
 }
+/** 
+  @method secondsToHMS
+  @description 
+  @param seconds
+  @return time
+**/
 var secondsToHMS = function (seconds){
     var h = Math.floor(seconds / 3600);
     var m = Math.floor(seconds % 3600 / 60);
@@ -276,23 +319,33 @@ var secondsToHMS = function (seconds){
 
     return ((h < 10 ? "0":"") + h + ":" + (m < 10 ? "0" : "") + m + ":" + (s < 10 ? "0" : "") + s);
 }
-//stage
 
+/** 
+  @method getStageStanding
+  @description 
+  @param id
+  @return res
+**/
 function getStageStanding(id,res){
   var race_id = races[id].race_id;
-  console.log(client_id)
+  //console.log(client_id)
   var query_result_by_race = "/api/race/"+race_id+"/results?format=json&client_id="+client_id+"&user_id="+user_id+"&user_pass="+user_pass+"&page=1&size=1600&mode=ctlive";
   var uri_crhono = hostname+query_result_by_race;
   request(uri_crhono,function(err,resp,body){
     body = JSON.parse(body);
-    console.log(body.race_results)
+    //console.log(body.race_results)
     var theResults = body.race_results; 
     var JSONToSend = processRaceResults(theResults);
     res.json(JSONToSend);
   });
 
 }
-
+/** 
+  @method processRaceResults
+  @description 
+  @param theResults
+  @return objectToSend
+**/
 function processRaceResults(theResults){
   var objectToSend = []; 
   theResults.forEach(function(value,index){
@@ -307,18 +360,16 @@ function processRaceResults(theResults){
   return objectToSend;
 }
 
-//HTTP Get Call for the overall standing
+//HTTP GET /Overall Call for the overall standing
 app.get('/Overall', function(req, res) {
-    console.log("Llego al Overall")
     var bracket = req.query.bracket; 
-    console.log("Este es el bracket que llega por el GET: " + bracket);
     overallStanding(bracket,res); 
 });
 
-//HTTP Get call for the 7 stages 
+//HTTP GET /Stage call for the 7 stages 
 app.get('/Stage', function(req, res) {
     var index = req.query.id;
-    console.log("Este es el id que llega por GET: " + index);
+    //console.log("Este es el id que llega por GET: " + index);
     getStageStanding(index - 1,res);
       
 });
