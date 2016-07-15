@@ -1,0 +1,32 @@
+{
+  "name": "packages",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "dependencies": {
+    "async": "^1.5.2",
+    "body-parser": "^1.15.1",
+    "express": "^4.13.4",
+    "mongoose": "^4.5.3",
+    "request": "^2.72.0",
+    "client-oauth2": "^2.2.0",
+    "oauth2-server": "^2.4.1",
+    "simple-oauth2": "^0.7.0",
+    "oauth20-provider": "^0.6.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/phndavid13/smartsports.git"
+  },
+  "author": "Nelson Padilla - Santiado De Lor Ríos",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/phndavid13/smartsports/issues"
+  },
+  "homepage": "https://github.com/phndavid13/smartsports#readme"
+}
