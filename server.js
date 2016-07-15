@@ -164,18 +164,19 @@ function registerRace(race){
 //funciones
 
 //overall standing
-function overallStanding(bracket){
+function overallStanding(bracket,res){
   var theBracket = bracket.replace(" ","%20")
   var query_results_total = "/api/event/"+event_id+"/results?format=json&client_id="+client_id+"&user_id="+user_id+"&user_pass="+user_pass+"&page=1&size=1600";
   var query_results_total_with_bracket = "/api/event/"+event_id+"/results?format=json&client_id="+client_id+"&user_id="+user_id+"&user_pass="+user_pass+"&page=1&size=1600&bracket="+theBracket;
   if(bracket=="overall"){
-    console.log("entra al if bracket overall")
     var uri_crhono = hostname + query_results_total;
     request(uri_crhono,function(err,resp,body){
       body = JSON.parse(body);
       var theTotalResults = body.event_results; 
-      var JSONTosend = processTotalResult(theTotalResults);
-      console.log(JSONTosend)
+      var JSONToSend = processTotalResult(theTotalResults);
+      bubbleSort(JSONToSend);
+      res.json(JSONToSend);
+      console.log(JSONToSend);
     });
   }else{
     var uri_crhono_bracket = hostname + query_results_total_with_bracket;
@@ -184,6 +185,8 @@ function overallStanding(bracket){
       console.log(body.event_results);
       var theTotalResults = body.event_results; 
       var JSONTosend = processTotalResult(theTotalResults);
+      bubbleSort(JSONToSend);
+      res.json(JSONToSend);
     });
   }
 
@@ -198,7 +201,6 @@ function processTotalResult(theTotalResults){
       var currentTime = theTotalResults[i].results_time_with_penalty;
       secondJSON[search.index].time = addTimes(totalTime,currentTime);
     }else{
-      console.log("deberia entrar aqui 6 veces")
       var objectToAdd = {
         riders: theTotalResults[i].results_first_name + " - " + theTotalResults[i].results_last_name,
         riders_no: theTotalResults[i].results_bib,
@@ -219,7 +221,6 @@ function searchAthleteInResults(theTotalResults,athleteName){
   for(var i=0;i<theTotalResults.length;i++){
     var theName = theTotalResults[i].riders;
     if(theName==athleteName){
-      console.log("deberia entrar alguna vez")
       theReturn =  {
         exists: true, 
         index: i
@@ -229,27 +230,57 @@ function searchAthleteInResults(theTotalResults,athleteName){
   }
   return theReturn;
 }
+function bubbleSort(myArr){
+  var size = myArr.length;
+  for( var pass = 1; pass < size; pass++ ){ // outer loop
+    for( var left = 0; left < (size - pass); left++){ // inner loop
+      var right = left + 1;
+      var first = HHMMSSToSeconds(myArr[left].time);
+      var next = HHMMSSToSeconds(myArr[right].time);
+      if( first > next ){
+        myArr[left].time = secondsToHMS(next);
+        myArr[right].time = secondsToHMS(first);
+      }
+    }
+  }
+ 
+  return myArr;
+}
+function HHMMSSToSeconds(time){
+
+  console.log("Lo que entra al HHMMSSToSeconds: " + time)
+
+  var timeSplit = time.split(":"); 
+  return timeToSeconds = (+timeSplit[0]) * 60 * 60  + (+timeSplit[1]) * 60 + (+timeSplit[2]);
+
+}
 function addTimes(totalTime,currentTime){
+  
   var newTotalTime = totalTime.replace(".0","");
   var newCurrentTime = currentTime.replace(".0","");
-  console.log(newTotalTime);
-  console.log(newCurrentTime)
   
-  var totalParts = newTotalTime.split(":");
-  var totalCurrent = newCurrentTime.split(":");
+  console.log(newTotalTime);
+  console.log(newCurrentTime);
 
-  var totalTimeToSeconds = (totalParts[0] * 60 * 60 ) + (totalParts[1] * 60) + (totalParts[2]);
-  var totalCurrentToSecondos = (totalCurrent[0] * 60 * 60) + (totalCurrent[1] * 60) + (totalCurrent[2]);
+  var totalTimeToSeconds = HHMMSSToSeconds(newTotalTime);
+  var totalCurrentToSeconds = HHMMSSToSeconds(newCurrentTime);
 
-  var addedTime = totalCurrentToSeconds + totalCurrentToSeconds; 
+  var addedTime = totalTimeToSeconds + totalCurrentToSeconds; 
 
-  return msToHMS(addedTime); 
+  return secondsToHMS(addedTime); 
 }
 var secondsToHMS = function (seconds){
     var h = Math.floor(seconds / 3600);
     var m = Math.floor(seconds % 3600 / 60);
     var s = Math.floor(seconds % 3600 % 60);
-    return ((h > 0 ? h + ":" : "00:") + (m < 10 ? "0" : "") + m + ":" + (s < 10 ? "0" : "") + s);
+
+    return ((h < 10 ? "0":"") + h + ":" + (m < 10 ? "0" : "") + m + ":" + (s < 10 ? "0" : "") + s);
+}
+function swap(myArr, indexOne, indexTwo){
+  var tmpVal = myArr[indexOne];
+  myArr[indexOne] = myArr[indexTwo];
+  myArr[indexTwo] = tmpVal;
+  return myArr;
 }
 
 //stage
@@ -288,7 +319,7 @@ app.get('/Overall', function(req, res) {
     console.log("Llego al Overall")
     var bracket = req.query.bracket; 
     console.log("Este es el bracket que llega por el GET: " + bracket);
-    overallStanding(bracket); 
+    overallStanding(bracket,res); 
 });
 
 //HTTP Get call for the 7 stages 
