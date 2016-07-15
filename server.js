@@ -276,13 +276,6 @@ var secondsToHMS = function (seconds){
 
     return ((h < 10 ? "0":"") + h + ":" + (m < 10 ? "0" : "") + m + ":" + (s < 10 ? "0" : "") + s);
 }
-function swap(myArr, indexOne, indexTwo){
-  var tmpVal = myArr[indexOne];
-  myArr[indexOne] = myArr[indexTwo];
-  myArr[indexTwo] = tmpVal;
-  return myArr;
-}
-
 //stage
 
 function getStageStanding(id,res){
