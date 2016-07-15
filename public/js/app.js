@@ -3,18 +3,18 @@ angular.module('app', ['ngRoute'])
   function($routeProvider, $locationProvider) {
          $routeProvider
             .when('/Overall',{
-            	templateUrl: 'views/overall.html'
+              templateUrl: 'views/overall.html'
             })
             .when('/Top10',{
               templateUrl: 'views/topten.html'
             })
             .when('/Stage/:stageId',{
-            	templateUrl: 'views/stage.html',
+              templateUrl: 'views/stage.html',
             })
             .otherwise({
-		          redirectTo: 'Overall'
-		        });
-         //	$locationProvider.html5Mode(true);
+              redirectTo: 'Overall'
+            });
+         // $locationProvider.html5Mode(true);
  }])
 .controller('StageCtrl', function($scope, $routeParams, $http) {
   this.name = "StageCtrl";
@@ -31,6 +31,7 @@ angular.module('app', ['ngRoute'])
     console.log(value);
     $http.get("/Overall?bracket="+value)
     .then(function(response) {
+      $scope.overall_result = response.data;
         console.log(response.data);
   });
   });
