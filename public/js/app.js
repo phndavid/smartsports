@@ -31,6 +31,7 @@ angular.module('app', ['ngRoute'])
     console.log(value);
     $http.get("/Overall?bracket="+value)
     .then(function(response) {
+      $scope.overall_result = response.data;
         console.log(response.data);
   });
   });

@@ -30,12 +30,12 @@
 	          </tr>
 	        </thead>
 	        <tbody>
-	          <tr ng-repeat="entry in event_users.event_entry">        
-	            <td>{{entry.entry_id}}</td>
-	            <td>{{entry.entry_name}}</td>
-				<td>{{entry.athlete_sex}}</td>	         
-	            <td>{{entry.race_id}}</td>
-	            <td>{{entry.race_name}}</td>
+	          <tr ng-repeat="entry in overall_result">        
+	            <td>{{$index}}</td>
+	            <td>{{entry.riders}}</td>
+				<td>{{entry.riders_no}}</td>	         
+	            <td>{{entry.time}}</td>
+	            <td>{{entry.bracket}}</td>
 	          </tr>
 	        </tbody>
 	      </table>
