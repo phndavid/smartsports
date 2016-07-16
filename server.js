@@ -177,6 +177,7 @@ function overallStanding(bracket,res){
       var theTotalResults = body.event_results; 
       var JSONToSend = processTotalResult(theTotalResults);
       bubbleSort(JSONToSend);
+      JSONToSend = checkAthletesWithAllRaces(JSONToSend);
       res.json(JSONToSend);
       //console.log(JSONToSend);
     });
@@ -188,11 +189,22 @@ function overallStanding(bracket,res){
       //console.log(body.event_results);
       var theTotalResults = body.event_results; 
       var JSONByBracket = processTotalResult(theTotalResults);
+      JSONByBracket = checkAthletesWithAllRaces(JSONByBracket);
       bubbleSort(JSONByBracket);
       res.json(JSONByBracket);
     });
   }
 
+}
+function checkAthletesWithAllRaces(JSONToSend){
+  var newJSONToSend = [] 
+  JSONToSend.forEach(function(value,index){
+    if(value.races.length==races.length){
+      newJSONToSend.push(value);
+    }
+  });
+  console.log(newJSONToSend.length)
+  return newJSONToSend;
 }
 /** 
   @method processTotalResult
@@ -209,13 +221,15 @@ function processTotalResult(theTotalResults){
       var totalTime = secondJSON[search.index].time;
       var currentTime = theTotalResults[i].results_time_with_penalty;
       secondJSON[search.index].time = addTimes(totalTime,currentTime);
+      secondJSON[search.index].races.push(theTotalResults[i].results_race_name);
     }else{
       var objectToAdd = {
         riders: theTotalResults[i].results_first_name + " - " + theTotalResults[i].results_last_name,
         riders_no: theTotalResults[i].results_bib,
         time: theTotalResults[i].results_time_with_penalty,
         gap: 0,
-        bracket: theTotalResults[i].results_primary_bracket_name
+        bracket: theTotalResults[i].results_primary_bracket_name,
+        races: [theTotalResults[i].results_race_name]
       }
       secondJSON.push(objectToAdd);
     }
@@ -334,7 +348,7 @@ function getStageStanding(id,res){
   var uri_crhono = hostname+query_result_by_race;
   request(uri_crhono,function(err,resp,body){
     body = JSON.parse(body);
-    console.log(body.race_results)
+    //console.log(body.race_results)
     var theResults = body.race_results; 
     var JSONToSend = processRaceResults(theResults);
     res.json(JSONToSend);
