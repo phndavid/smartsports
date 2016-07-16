@@ -12,7 +12,7 @@ angular.module('app', ['ngRoute'])
               templateUrl: 'views/stage.html',
             })
             .otherwise({
-              redirectTo: 'Overall'
+              redirectTo: 'Top10'
             });
          // $locationProvider.html5Mode(true);
  }])

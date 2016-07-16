@@ -173,8 +173,10 @@ function overallStanding(bracket,res){
   var query_results_total_with_bracket = "/api/event/"+event_id+"/results?format=json&client_id="+client_id+"&user_id="+user_id+"&user_pass="+user_pass+"&page=1&size=1600&bracket="+theBracket;
   if(bracket=="overall"){
     var uri_crhono = hostname + query_results_total;
+    console.log(uri_crhono);
     request(uri_crhono,function(err,resp,body){
       body = JSON.parse(body);
+      console.log(body.event_results);
       var theTotalResults = body.event_results; 
       var JSONToSend = processTotalResult(theTotalResults);
       bubbleSort(JSONToSend);
