@@ -18,14 +18,16 @@
 		<div  style="background: #0E3B68;height:150px; padding: 10px;">
 			<div style="float: left;">
 				<h4 style="margin-bottom: 0px; color: #fff;">Overall Standing Classifications</h4>
-	    		<span style="color: #fff;">31 JULY to 6 AUGUST 2016 – 7 stages | 600 km + | 18,000 m</span>    	
+	    		<span style="color: #fff;">31 JULY to 6 AUGUST 2016 – 7 stages | 600 km + | 18,000 m</span> 
+	    		<br>
+	    		<img style="height: 40px; width: 121px; margin-top: 10px;"src="./img/chronotrack.png">  	
 			</div>
 	    	<img style="height:100px; float: right; margin-top: 10px;"src="./img/logo_legend.png">    	
 	    </div>
 	    <div>
 	     <nav style="background: #de6127;">
 				      <div class="nav-wrapper">		     
-				        <ul class="hide-on-med-and-down">				          	
+				        <ul class="nav hide-on-med-and-down">				          	
 				          	<li class="active"><a href="#/Top10">Top 10</a></li>
 				          	<li><a href="#/Overall">Overall Standing</a></li>
 				    		<li><a href="#/Stage/1">Stage 1</a></li>
@@ -75,16 +77,16 @@
     <!--Import jQuery before materialize.js-->
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script type="text/javascript" src="js/materialize.min.js"></script>
-    <script type="text/javascript">
-				var selector = '.nav li';
-				$(selector).on('click', function(){
-				    $(selector).removeClass('active');
-				    $(this).addClass('active');
-				});
-				 $( document ).ready(function() {
-      $(".button-collapse").sideNav();
-    });
-				
+    <script type="text/javascript">		
+		 $( document ).ready(function() {
+			var selector = '.nav li';
+			$(selector).on('click', function(){
+			    $(selector).removeClass('active');
+			    $(this).addClass('active');
+			});
+			$(".button-collapse").sideNav();
+
+		});			
 	</script>
     <!-- AngularJS -->
     <script type="text/javascript" src="lib/angular.min.js"></script>
