@@ -30,7 +30,6 @@ var query_event = "/api/event/"+event_id+"?format=json&client_id="+client_id+"&u
 var query_users = "/api/event/"+event_id+"/entry?format=json&client_id="+client_id+"&user_id="+user_id+"&user_pass="+user_pass+"&size=1600&include_test_entries=true&elide_json=false;";
 var query_result = "/api/event/"+event_id+"/results?format=json&client_id="+client_id+"&user_id="+user_id+"&user_pass="+user_pass+"&size=1600&include_test_entries=true&elide_json=false;";
 var query_race = "/api/event/"+event_id+"/race?format=json&client_id="+client_id+"&user_id="+user_id+"&user_pass="+user_pass+"&page=1&size=50&include_not_wants_results=true";
-//var query_result_by_race = "/api/race/"+race_id+"results?format=json&client_id="+client_id+"&user_id="+user_id+"&user_pass="+user_pass+"page=1&size=1600&mode=ctlive";
 
 var event;
 //Se registra el evento
@@ -104,7 +103,7 @@ function registerAthletes(){
         athletes.forEach(function(value,index){
           var newAthlete = Athlete({
             athlete_id: value.athlete_id, 
-            entry_name: value.entry_name,
+            entry_name: value.athlete_first_name + " - " + value.athlete_last_name,
             entry_status: value.entry_status,
             entry_bib: value.entry_bib, 
             races: value.races,
@@ -120,7 +119,6 @@ function registerAthletes(){
     }
   });
 }
-
 // Se registran las carreras
 var races = [];
 function getRace(){
@@ -163,7 +161,7 @@ function registerRace(race){
 
 /** 
   @method overallStanding
-  @description 
+  @description  metodo que realiza las peticiones a chronotrack para realizar la clasificacion general 
   @param bracket
   @param res
 **/
@@ -173,10 +171,9 @@ function overallStanding(bracket,res){
   var query_results_total_with_bracket = "/api/event/"+event_id+"/results?format=json&client_id="+client_id+"&user_id="+user_id+"&user_pass="+user_pass+"&page=1&size=1600&bracket="+theBracket;
   if(bracket=="overall"){
     var uri_crhono = hostname + query_results_total;
-    console.log(uri_crhono);
     request(uri_crhono,function(err,resp,body){
       body = JSON.parse(body);
-      console.log(body.event_results);
+      //console.log(body.event_results)
       var theTotalResults = body.event_results; 
       var JSONToSend = processTotalResult(theTotalResults);
       bubbleSort(JSONToSend);
@@ -199,7 +196,7 @@ function overallStanding(bracket,res){
 }
 /** 
   @method processTotalResult
-  @description 
+  @description metodo que procesa el json enviado por chronotrack y define un nuevo arreglo con los tiempos totales de los corredores
   @param theTotalResults
   @return secondJSON
 **/
@@ -227,7 +224,7 @@ function processTotalResult(theTotalResults){
 }
 /** 
   @method searchAthleteInResults
-  @description 
+  @description busca un atleta en el arreglo para verificar si ya existe 
   @param theTotalResults
   @param athleteName
   @return theReturn
@@ -251,11 +248,12 @@ function searchAthleteInResults(theTotalResults,athleteName){
 }
 /** 
   @method bubbleSort
-  @description 
+  @description metoodo que se encarga de ordenar el arreglo a enviar por el metodo burbuja
   @param myArr
   @return myArr
 **/
 function bubbleSort(myArr){
+  console.log(myArr)
   if(myArr != undefined && myArr != null){
     var size = myArr.length;
     for( var pass = 1; pass < size; pass++ ){ // outer loop
@@ -264,8 +262,9 @@ function bubbleSort(myArr){
           var first = HHMMSSToSeconds(myArr[left].time);
           var next = HHMMSSToSeconds(myArr[right].time);
           if( first > next ){
-            myArr[left].time = secondsToHMS(next);
-            myArr[right].time = secondsToHMS(first);
+            var temp = myArr[left];
+            myArr[left] = myArr[right];
+            myArr[right] = temp;
           }
         }
     }
@@ -274,7 +273,7 @@ function bubbleSort(myArr){
 }
 /** 
   @method HHMMSSToSeconds
-  @description 
+  @description metodo que convierre una fecha en formato HHMMSS a segundos
   @param time
   @return timeToSeconds
 **/
@@ -288,7 +287,7 @@ function HHMMSSToSeconds(time){
 }
 /** 
   @method addTimes
-  @description 
+  @description metodo que suma dos tiempos
   @param totalTime
   @param currentTime
   @return timeToSeconds
@@ -310,7 +309,7 @@ function addTimes(totalTime,currentTime){
 }
 /** 
   @method secondsToHMS
-  @description 
+  @description metodo que convierte el tiempo en segundos a formato HHMMSS
   @param seconds
   @return time
 **/
@@ -324,7 +323,7 @@ var secondsToHMS = function (seconds){
 
 /** 
   @method getStageStanding
-  @description 
+  @description metodo que realiza la comunicacion con chronotrack para generar la clasificacion por etapas
   @param id
   @return res
 **/
@@ -335,7 +334,7 @@ function getStageStanding(id,res){
   var uri_crhono = hostname+query_result_by_race;
   request(uri_crhono,function(err,resp,body){
     body = JSON.parse(body);
-    //console.log(body.race_results)
+    console.log(body.race_results)
     var theResults = body.race_results; 
     var JSONToSend = processRaceResults(theResults);
     res.json(JSONToSend);
@@ -344,7 +343,7 @@ function getStageStanding(id,res){
 }
 /** 
   @method processRaceResults
-  @description 
+  @description metodo que procesa el json enviado por chronotrack para producir la clasificacion de la etapa 
   @param theResults
   @return objectToSend
 **/
@@ -362,6 +361,10 @@ function processRaceResults(theResults){
   return objectToSend;
 }
 
+//Metodo actualizacion en base de datos 
+
+//Metodo actualizar athletas 
+
 //HTTP GET /Overall Call for the overall standing
 app.get('/Overall', function(req, res) {
     var bracket = req.query.bracket; 
@@ -375,7 +378,7 @@ app.get('/Stage', function(req, res) {
     getStageStanding(index - 1,res);
       
 });
-
+//Web server initialization
 app.listen(port, ipaddress, function() {
   getEvent();
   getAtletas();
