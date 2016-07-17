@@ -3,20 +3,27 @@
 	    <div class="col s12">
     	  <table class="striped">
 	        <thead>
-	          <tr>
-	          	<th data-field="id">Rank</th>
-	            <th data-field="id">Riders</th>
-	            <th data-field="name">Riders No</th>
-   	            <th data-field="name">Time</th>   	          
-	            <th data-field="price">Bracket</th>	            	           
+	            <tr>
+	          	<th data-field="rack">RANK</th>
+	            <th data-field="riders">RIDERS</th>
+	            <th data-field="riders_num">RIDERS No.</th>
+   	            <th data-field="time">TIME</th>   	          
+	            <th data-field="bracket">BRACKET</th>	            	           
+	          </tr>
+	          <tr class="line">
+	          	<td><div>&nbsp;</div></td>
+	            <td><div>&nbsp;</div></td>
+	            <td><div>&nbsp;</div></td>
+   	            <td><div>&nbsp;</div></td>   	          
+	            <td><div>&nbsp;</div></td>	            	           
 	          </tr>
 	        </thead>
 	        <tbody>
 	          <tr ng-repeat="top in overall_result | limitTo:10">        
-	            <td>{{$index+1}}</td>
+	            <td><b>{{$index+1}}.</b></td>
 	            <td>{{top.riders}}</td>
 				<td>{{top.riders_no}}</td>	         
-	            <td>{{top.time}}</td>
+	            <td><b>{{top.time}}</b></td>
 	            <td>{{top.bracket}}</td>
 	          </tr>
 	        </tbody>

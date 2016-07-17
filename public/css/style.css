@@ -17,6 +17,15 @@ body{
     margin: 0px auto;
     font-family: DINPro;
 }
+thead{
+    border: none;
+}
+th{
+    padding: 0px 5px;
+}
+td{
+    padding: 5px 5px;
+}
 footer{
     background-color: #0E3B68;
     position: fixed;
@@ -29,4 +38,8 @@ footer{
 }
 .ft-info{
     float: right;
+}
+.line > td > div{
+    background-color:#de6127;
+    height: 4px;
 }
