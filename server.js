@@ -196,10 +196,19 @@ function overallStanding(bracket,res){
   }
 
 }
+function maximumNumberOfRaces(JSONTosend){
+  var racesLength = []; 
+  JSONTosend.forEach(function(value){
+    racesLength.push(value.races.length);
+  });
+  console.log(Math.max.apply(null,racesLength));
+  return Math.max.apply(null,racesLength);
+}
 function checkAthletesWithAllRaces(JSONToSend){
   var newJSONToSend = [] 
+  var maxLength = maximumNumberOfRaces(JSONToSend); 
   JSONToSend.forEach(function(value,index){
-    if(value.races.length==races.length){
+    if(value.races.length==maxLength){
       newJSONToSend.push(value);
     }
   });
