@@ -3,7 +3,8 @@ var app = express();
 var bodyParser = require('body-parser');
 var request = require('request');
 var async = require('async');
-
+var json2csv = require('json2csv');
+var fs = require('fs');
 var Event = require("./models/event.js");
 var Athlete = require("./models/athlete.js");
 var Race = require ("./models/race.js");
@@ -158,7 +159,7 @@ function registerRace(race){
     }
   });
 }
-
+var myOverallStanding = [];
 /** 
   @method overallStanding
   @description  metodo que realiza las peticiones a chronotrack para realizar la clasificacion general 
@@ -173,20 +174,17 @@ function overallStanding(bracket,res){
     var uri_crhono = hostname + query_results_total;
     request(uri_crhono,function(err,resp,body){
       body = JSON.parse(body);
-      //console.log(body.event_results)
       var theTotalResults = body.event_results; 
       var JSONToSend = processTotalResult(theTotalResults);
       bubbleSort(JSONToSend);
       JSONToSend = checkAthletesWithAllRaces(JSONToSend);
+      myOverallStanding = JSONToSend;
       res.json(JSONToSend);
-      //console.log(JSONToSend);
     });
   }else{
     var uri_crhono_bracket = hostname + query_results_total_with_bracket;
-    //console.log(uri_crhono_bracket);
     request(uri_crhono_bracket,function(err,resp,body){
       body = JSON.parse(body);
-      //console.log(body.event_results);
       var theTotalResults = body.event_results; 
       var JSONByBracket = processTotalResult(theTotalResults);
       JSONByBracket = checkAthletesWithAllRaces(JSONByBracket);
@@ -276,7 +274,7 @@ function searchAthleteInResults(theTotalResults,athleteName){
   @return myArr
 **/
 function bubbleSort(myArr){
-  console.log(myArr)
+  //console.log(myArr)
   if(myArr != undefined && myArr != null){
     var size = myArr.length;
     for( var pass = 1; pass < size; pass++ ){ // outer loop
@@ -401,6 +399,39 @@ app.get('/Stage', function(req, res) {
     getStageStanding(index - 1,res);
       
 });
+//HTTP GET /File call for dowload Overall Standing
+//User validation
+var basicAuth = require('basic-auth');
+
+var auth = function (req, res, next) {
+  function unauthorized(res) {
+    res.set('WWW-Authenticate', 'Basic realm=Authorization Required');
+    return res.sendStatus(401);
+  };
+
+  var user = basicAuth(req);
+
+  if (!user || !user.name || !user.pass) {
+    return unauthorized(res);
+  };
+
+  if (user.name === 'admin' && user.pass === 'smartsports@') {
+    return next();
+  } else {
+    return unauthorized(res);
+  };
+};
+var fields = ['rank', 'riders', 'riders_no','time','bracket'];
+app.get('/File',auth, function(req, res) {
+  var csv = json2csv({ data: myOverallStanding, fields: fields });  
+  fs.writeFile('overallStanding.csv', csv, function(err) {
+    if (err) throw err;
+    console.log('file saved');
+    path = __dirname + '/overallStanding.csv';
+    res.download(path);
+  });        
+});
+
 //Web server initialization
 app.listen(port, ipaddress, function() {
   getEvent();
