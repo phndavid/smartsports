@@ -6,16 +6,18 @@
 	           <tr>
 	          	<th data-field="rack">RANK</th>
 	            <th data-field="riders">RIDERS</th>
-	            <th data-field="riders_num">RIDERS No.</th>
-   	            <th data-field="time">TIME</th>   	          
-	            <th data-field="bracket">BRACKET</th>	            	           
+	            <th data-field="riders_num">RIDERS No.</th>   	             	         
+	            <th data-field="bracket">BRACKET</th>	   
+	            <th data-field="time">TIME</th>
+	            <th data-field="time">GAP</th>
 	          </tr>
 	          <tr class="line">
 	          	<td><div>&nbsp;</div></td>
 	            <td><div>&nbsp;</div></td>
 	            <td><div>&nbsp;</div></td>
    	            <td><div>&nbsp;</div></td>   	          
-	            <td><div>&nbsp;</div></td>	            	           
+	            <td><div>&nbsp;</div></td>
+	            <td><div>&nbsp;</div></td>		            	           
 	          </tr>
 	        </thead>
 
@@ -23,9 +25,10 @@
 	          <tr ng-repeat="stage in stage_result">        
 	            <td><b>{{stage.rank}}.</b></td>
 	            <td>{{stage.riders}}</td>
-				<td>{{stage.riders_no}}</td>	         
+				<td>{{stage.riders_no}}</td>
+				<td>{{stage.bracket}}</td>	         
 	            <td><b>{{stage.time}}</b></td>
-	            <td>{{stage.bracket}}</td>
+	            <td><b>{{stage.gap}}</b></td>
 	          </tr>
 	        </tbody>
 	      </table>

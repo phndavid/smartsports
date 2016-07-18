@@ -43,3 +43,17 @@ footer{
     background-color:#de6127;
     height: 4px;
 }
+.lg-chrono{
+    height: 40px; 
+    width: 121px; 
+    margin-top: 10px;
+}
+@media(max-width: 320px){
+    footer{
+        top: calc(100% - 90px);
+        text-align: center;
+    }
+    .lg-chrono{
+        display: none;
+    }
+}
