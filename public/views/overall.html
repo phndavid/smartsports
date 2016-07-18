@@ -20,7 +20,7 @@
 	          <tr>
 	          	<th data-field="rack">RANK</th>
 	            <th data-field="riders">RIDERS</th>
-	            <th data-field="riders_num">RIDERS No.</th>
+	            <th class="none" data-field="riders_num">RIDERS No.</th>
    	            <th data-field="bracket">BRACKET</th>
    	            <th data-field="time">TIME</th> 
    	             <th data-field="gap">GAP</th>   	          	            	            	           
@@ -28,7 +28,7 @@
 	          <tr class="line">
 	          	<td><div>&nbsp;</div></td>
 	            <td><div>&nbsp;</div></td>
-	            <td><div>&nbsp;</div></td>
+	            <td class="none"><div>&nbsp;</div></td>
    	            <td><div>&nbsp;</div></td>   	          
 	            <td><div>&nbsp;</div></td>	 
 	            <td><div>&nbsp;</div></td>	            	           
@@ -38,7 +38,7 @@
 	          <tr ng-repeat="entry in overall_result">        
 	            <td><b>{{entry.rank}}.</b></td>
 	            <td>{{entry.riders}}</td>
-				<td>{{entry.riders_no}}</td>	         
+				<td class="none">{{entry.riders_no}}</td>	         
 	            <td>{{entry.bracket}}</td>
 	            <td><b>{{entry.time}}</b></td>
 	           	<td><b>{{entry.gap}}</b></td>

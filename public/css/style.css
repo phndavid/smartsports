@@ -48,12 +48,17 @@ footer{
     width: 121px; 
     margin-top: 10px;
 }
-@media(max-width: 320px){
-    footer{
-        top: calc(100% - 90px);
-        text-align: center;
+.none{
+    display: block;
+}
+.dev{
+    display: none;
+}
+@media(max-width: 475px){
+    .dev{
+        display: block;
     }
-    .lg-chrono{
+    .none{
         display: none;
     }
 }
