@@ -178,6 +178,8 @@ function overallStanding(bracket,res){
       var JSONToSend = processTotalResult(theTotalResults);
       bubbleSort(JSONToSend);
       JSONToSend = checkAthletesWithAllRaces(JSONToSend);
+      defineTimesGap(JSONToSend)
+      console.log(JSONToSend)
       myOverallStanding = JSONToSend;
       res.json(JSONToSend);
     });
@@ -187,8 +189,9 @@ function overallStanding(bracket,res){
       body = JSON.parse(body);
       var theTotalResults = body.event_results; 
       var JSONByBracket = processTotalResult(theTotalResults);
-      JSONByBracket = checkAthletesWithAllRaces(JSONByBracket);
       bubbleSort(JSONByBracket);
+      JSONByBracket = checkAthletesWithAllRaces(JSONByBracket);
+      defineTimesGap(JSONByBracket);
       res.json(JSONByBracket);
     });
   }
@@ -210,8 +213,16 @@ function checkAthletesWithAllRaces(JSONToSend){
       newJSONToSend.push(value);
     }
   });
+  newJSONToSend.forEach(function(value, index){
+    value.rank = index+1;
+  });
   console.log(newJSONToSend.length)
   return newJSONToSend;
+}
+function defineTimesGap(JSONToSend){
+  for(var i = 1; i<JSONToSend.length;i++){
+    JSONToSend[i].gap = substractTimes(JSONToSend[i].time,JSONToSend[i-1].time);
+  }
 }
 /** 
   @method processTotalResult
@@ -231,7 +242,6 @@ function processTotalResult(theTotalResults){
       secondJSON[search.index].races.push(theTotalResults[i].results_race_name);
     }else{
       var objectToAdd = {
-        rank: i+1,
         riders: theTotalResults[i].results_first_name + " - " + theTotalResults[i].results_last_name,
         riders_no: theTotalResults[i].results_bib,
         time: theTotalResults[i].results_time_with_penalty,
@@ -329,6 +339,15 @@ function addTimes(totalTime,currentTime){
 
   return secondsToHMS(addedTime); 
 }
+function substractTimes(previousTime, time){
+  
+  var previousTimeToSeconds = HHMMSSToSeconds(previousTime);
+  var timeToSeconds = HHMMSSToSeconds(time); 
+
+  var substractedTime = previousTimeToSeconds - timeToSeconds; 
+
+  return secondsToHMS(substractedTime);
+}
 /** 
   @method secondsToHMS
   @description metodo que convierte el tiempo en segundos a formato HHMMSS
@@ -373,11 +392,12 @@ function processRaceResults(theResults){
   var objectToSend = []; 
   theResults.forEach(function(value,index){
     objectToSend[index] = {
-      rank: theResults[index].results_rank,
-      riders: theResults[index].results_first_name + " - " + theResults[index].results_last_name,
-      riders_no: theResults[index].results_bib,
-      time: theResults[index].results_time_with_penalty,
-      bracket: theResults[index].results_primary_bracket_name
+      rank: value.results_rank,
+      riders: value.results_first_name + " - " + value.results_last_name,
+      riders_no: value.results_bib,
+      time: value.results_time_with_penalty,
+      bracket: value.results_primary_bracket_name,
+      gap: (index>0 ? substractTimes(value.results_time_with_penalty, theResults[index-1].results_time_with_penalty):0)
     }
   });
   return objectToSend;

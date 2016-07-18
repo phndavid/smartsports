@@ -11,7 +11,8 @@ var race_schema = new Schema({
 	plannedStartTime: Date,
 	plannedFinishTime: Date, 
 	raceActualStartTime: Date, 
-	raceActualFinishTime: Date
+	raceActualFinishTime: Date, 
+	riders: []
 });
 
 var Race = mongoose.model("Race", race_schema);
