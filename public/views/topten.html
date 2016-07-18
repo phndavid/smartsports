@@ -8,23 +8,26 @@
 	            <th data-field="riders">RIDERS</th>
 	            <th data-field="riders_num">RIDERS No.</th>
    	            <th data-field="time">TIME</th>   	          
-	            <th data-field="bracket">BRACKET</th>	            	           
+	            <th data-field="bracket">BRACKET</th>
+	            <th data-field="gap">GAP</th>	            	           
 	          </tr>
 	          <tr class="line">
 	          	<td><div>&nbsp;</div></td>
 	            <td><div>&nbsp;</div></td>
 	            <td><div>&nbsp;</div></td>
    	            <td><div>&nbsp;</div></td>   	          
+	            <td><div>&nbsp;</div></td>
 	            <td><div>&nbsp;</div></td>	            	           
 	          </tr>
 	        </thead>
 	        <tbody>
 	          <tr ng-repeat="top in overall_result | limitTo:10">        
-	            <td><b>{{$index+1}}.</b></td>
+	            <td><b>{{top.rank}}.</b></td>
 	            <td>{{top.riders}}</td>
 				<td>{{top.riders_no}}</td>	         
-	            <td><b>{{top.time}}</b></td>
 	            <td>{{top.bracket}}</td>
+	            <td><b>{{top.time}}</b></td>
+	            <td><b>{{top.time}}</b></td>
 	          </tr>
 	        </tbody>
 	      </table>
