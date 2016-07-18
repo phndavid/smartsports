@@ -231,6 +231,7 @@ function processTotalResult(theTotalResults){
       secondJSON[search.index].races.push(theTotalResults[i].results_race_name);
     }else{
       var objectToAdd = {
+        rank: i+1,
         riders: theTotalResults[i].results_first_name + " - " + theTotalResults[i].results_last_name,
         riders_no: theTotalResults[i].results_bib,
         time: theTotalResults[i].results_time_with_penalty,
