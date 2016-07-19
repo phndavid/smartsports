@@ -18,17 +18,16 @@
 </head>
 <body>
 	<div class="container">
-		<div  style="background: #0E3B68;height:150px; padding: 10px;">
-			<div style="float: left;">
-				<h4 style="margin-bottom: 0px; color: #fff;">Overall Standing Classifications</h4>
+		<div  class="banner">
+			<div style="float: left; padding: 10px;">
+				<h3 class="title">Overall Standing Classifications</h3>
 	    		<span style="color: #fff;">31 JULY to 6 AUGUST 2016 – 7 stages | 600 km + | 18,000 m</span> 
 	    		<br>
-	    		<img class="lg-chrono none" src="./img/chronotrack.png">  	
 			</div>
-	    	<img style="height:100px; float: right; margin-top: 10px;"src="./img/logo_legend.png">    	
+	    	<img class="lg-legend" src="./img/logo_dorado.png">    	
 	    </div>
 	    <div>
-	     <nav style="background: #de6127;">
+	     <nav style="background: #0F2362;">
 				      <div class="nav-wrapper">		     
 				        <ul class="nav hide-on-med-and-down">				          	
 				          	<li class="active"><a href="#/Top10">Top 10</a></li>
@@ -40,6 +39,7 @@
 				    		<li><a href="#/Stage/5">Stage 5</a></li>
 				    		<li><a href="#/Stage/6">Stage 6</a></li>
 				    		<li><a href="#/Stage/7">Stage 7</a></li>
+				    		<li><a href="https://results.chronotrack.com/event/results/event/event-22626 ">Individual Results</a></li>
 				        </ul>
 
 				         <ul id="nav-mobile" class="side-nav">							        		          
@@ -51,7 +51,8 @@
 				    		<li><a href="#/Stage/4">Stage 4</a></li>
 				    		<li><a href="#/Stage/5">Stage 5</a></li>
 				    		<li><a href="#/Stage/6">Stage 6</a></li>
-				    		<li><a href="#/Stage/7">Stage 7</a></li>				    		
+				    		<li><a href="#/Stage/7">Stage 7</a></li>
+				    		<li><a href="https://results.chronotrack.com/event/results/event/event-22626 ">Individual Results</a></li>				    		
 				        </ul>
 				         <a href="#" data-activates="nav-mobile" class="button-collapse">
 					         <i class="material-icons">menu</i>
@@ -60,24 +61,33 @@
 			</nav>
 		</div>
 	</div>
-	<div ng-view></div>
+	<div ng-view style="padding-bottom: 100px;"></div>
 	<footer>
-		<div class="container">
-			<div class="ft-copy">
-			 <span style="color:#fff;margin-top: 5px; position: absolute;">© 2016 Copyright</span>
-			</div>
-			<div class="ft-info">
-				<img style="width: 20px; height:30px;"src="./img/smartsports.svg">
-				<div style="float: right; padding: 5px;">
-					<span class="none" style="color: #fff">
-					Developed by <a href="http://smartsports.com.co/">SmartSports.com.co</a> | <a href="https://co.linkedin.com/in/santiagodelosrios">Santiago De Los Ríos</a> - <a href="https://co.linkedin.com/in/phndavid">Nelson D. Padilla</a>
-					</span>
-					<span class="dev" style="color: #fff">
-					Developed by <a href="http://smartsports.com.co/">SmartSports.com.co</a>
-					</span>
+		<div class="ft-copy">
+		 <img class="lg-chrono" src="./img/endurance_colombia.png">
+		 <img class="lg-chrono" src="./img/chronotrack.png">
+		 <img class="lg-chrono" src="./img/athlinks.png">
+		</div>
+		<div class="ft-info">
+			<img style="width: 45px; height:45px; margin-top: 8px;" src="./img/smartsports.svg">
+			<div style="float: right; padding: 5px;">
+				<div style="margin-right: 20px;">
+					<div class="col s12">
+						<span style="color: #fff; font-size: 15pt;">Developed by 
+						<a href="http://smartsports.com.co/">SmartSports.com.co</a> | © 2016 Copyright
+						</span>
+						<div class="col s12" style="padding: 0px;">
+						<span style="color: #fff; font-size: 10pt;">Developers:
+							<a href="https://co.linkedin.com/in/santiagodelosrios">Santiago De Los Ríos</a> - 
+							<a href="https://co.linkedin.com/in/phndavid">Nelson D. Padilla</a>
+						</span>
+						</div>
+					</div>
 				</div>
-				
+					
+				</span>
 			</div>
+			
 		</div>
 	</footer>
     <!--Import jQuery before materialize.js-->

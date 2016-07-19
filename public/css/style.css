@@ -27,14 +27,23 @@ td{
     padding: 5px 5px;
 }
 footer{
-    background-color: #0E3B68;
+    background-color: #0F2362;
     position: fixed;
-    top: calc(100% - 30px);
+    height: 60px;
+    top: calc(100% - 60px);
     width: 100%;
+}
+nav ul a {
+    font-size: 1.4rem !important;
+}
+.banner{
+    background: #158AA8;
+    height:150px;
 }
 .ft-copy{
     float: left;
-    height: 20px;
+    height: 60px;
+    margin-left: 20px;
 }
 .ft-info{
     float: right;
@@ -43,16 +52,29 @@ footer{
     background-color:#de6127;
     height: 4px;
 }
+.lg-legend{
+    height:150px;
+    float: right;
+}
 .lg-chrono{
-    height: 40px; 
-    width: 121px; 
+    height: 38px; 
+    width: 110px; 
     margin-top: 10px;
 }
-.none{
+.title{
+    margin-bottom: 0px;
+    color: #fff;
+}
+.block{
     display: block;
 }
 .dev{
     display: none;
+}
+@media(max-width: 1272px){
+    nav ul a {
+        font-size: 1rem !important;
+    }
 }
 @media(max-width: 475px){
     .dev{
@@ -60,5 +82,14 @@ footer{
     }
     .none{
         display: none;
+    }
+}
+@media(max-width: 340px){
+    .lg-legend{
+        height: 110px;
+    }
+    .lg-chrono{
+        height: 30px;
+        width: 90px;
     }
 }
