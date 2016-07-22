@@ -11,7 +11,6 @@ angular.module('app', ['ngRoute'])
             .otherwise({
               redirectTo: 'Top10'
             });
-         // $locationProvider.html5Mode(true);
  }])
 .controller('OverallCtrl', function($scope, $http){
   $http.get("/Overall?bracket=overall")
@@ -20,11 +19,9 @@ angular.module('app', ['ngRoute'])
   });
   $("#select").on('change', function() {
     var value = $(this).children(":selected").attr("value");
-    console.log(value);
     $http.get("/Overall?bracket="+value)
     .then(function(response) {
       $scope.overall_result = response.data;
-        console.log(response.data);
   });
   });
 })

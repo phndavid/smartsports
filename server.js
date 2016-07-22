@@ -74,22 +74,24 @@ function processTotalResult(theTotalResults){
   var secondJSON =[]; 
   for(var i=0; i<theTotalResults.length;i++){
     var theName = theTotalResults[i].results_first_name + " - " + theTotalResults[i].results_last_name;
-    var search = searchAthleteInResults(secondJSON,theName); 
-    if(search.exists){
-      var totalTime = secondJSON[search.index].time;
-      var currentTime = theTotalResults[i].results_time_with_penalty;
-      secondJSON[search.index].time = addTimes(totalTime,currentTime);
-      secondJSON[search.index].races.push({race_name: theTotalResults[i].results_race_name, race_time: theTotalResults[i].results_time_with_penalty});
-    }else{
-      var objectToAdd = {
-        riders: theTotalResults[i].results_first_name + " - " + theTotalResults[i].results_last_name,
-        riders_no: theTotalResults[i].results_bib,
-        time: theTotalResults[i].results_time_with_penalty,
-        gap: 0,
-        bracket: theTotalResults[i].results_primary_bracket_name,
-        races: [theTotalResults[i].results_race_name]
+    var search = searchAthleteInResults(secondJSON,theName);
+    if(theTotalResults[i].results_race_name != "ETAPA 3 VOLCAN"){ 
+      if(search.exists){
+        var totalTime = secondJSON[search.index].time;
+        var currentTime = theTotalResults[i].results_time_with_penalty;
+        secondJSON[search.index].time = addTimes(totalTime,currentTime);
+        secondJSON[search.index].races.push({race_name: theTotalResults[i].results_race_name, race_time: theTotalResults[i].results_time_with_penalty});
+      }else{
+        var objectToAdd = {
+          riders: theTotalResults[i].results_first_name + " - " + theTotalResults[i].results_last_name,
+          riders_no: theTotalResults[i].results_bib,
+          time: theTotalResults[i].results_time_with_penalty,
+          gap: 0,
+          bracket: theTotalResults[i].results_primary_bracket_name,
+          races: [theTotalResults[i].results_race_name]
+        }
+        secondJSON.push(objectToAdd);
       }
-      secondJSON.push(objectToAdd);
     }
   }
   return secondJSON;
@@ -106,7 +108,7 @@ function checkAthletesWithAllRaces(JSONToSend){
   var maxLength = maximumNumberOfRaces(JSONToSend); 
   JSONToSend.forEach(function(value,index){
     if(value.races.length==maxLength){
-      newJSONToSend.push(value);
+        newJSONToSend.push(value);
     }
   });
   newJSONToSend.forEach(function(value, index){
