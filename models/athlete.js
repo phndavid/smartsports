@@ -5,7 +5,7 @@ var athlete_schema = new Schema({
 	athlete_id: String,
 	entry_name: String,
 	entry_status: String,
-	number: Number,
+	bib: String,
 	races: [], 
 	bracket_name: String
 });

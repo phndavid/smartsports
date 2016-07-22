@@ -74,10 +74,10 @@ function checkRepitedAthletes(arrayAthletes) {
   for(var i=0; i<arrayAthletes.length;i++){
     if(arrayAthletes[i]!=undefined){
       arrayAthletes[i].races = [];
-      arrayAthletes[i].races.push(arrayAthletes[i].race_name);
+      arrayAthletes[i].races.push({race_name: arrayAthletes[i].race_name,race_time:0});
       for(var j=i+1;j<arrayAthletes.length;j++){
         if(arrayAthletes[j]!=undefined && (arrayAthletes[i].entry_name == arrayAthletes[j].entry_name)){
-          arrayAthletes[i].races.push(arrayAthletes[j].race_name);
+          arrayAthletes[i].races.push({race_name: arrayAthletes[j].race_name, race_time:0});
           delete arrayAthletes[j];      
         }
       }
@@ -106,7 +106,7 @@ function registerAthletes(){
             athlete_id: value.athlete_id, 
             entry_name: value.athlete_first_name + " - " + value.athlete_last_name,
             entry_status: value.entry_status,
-            entry_bib: value.entry_bib, 
+            bib: value.entry_bib, 
             races: value.races,
             bracket_name: value.bracket_name
           });
@@ -175,11 +175,12 @@ function overallStanding(bracket,res){
     request(uri_crhono,function(err,resp,body){
       body = JSON.parse(body);
       var theTotalResults = body.event_results; 
+      updateDBForOverallStanding(theTotalResults);
       var JSONToSend = processTotalResult(theTotalResults);
       bubbleSort(JSONToSend);
       JSONToSend = checkAthletesWithAllRaces(JSONToSend);
       defineTimesGap(JSONToSend)
-      console.log(JSONToSend)
+      //console.log(JSONToSend)
       myOverallStanding = JSONToSend;
       res.json(JSONToSend);
     });
@@ -197,33 +198,6 @@ function overallStanding(bracket,res){
   }
 
 }
-function maximumNumberOfRaces(JSONTosend){
-  var racesLength = []; 
-  JSONTosend.forEach(function(value){
-    racesLength.push(value.races.length);
-  });
-  console.log(Math.max.apply(null,racesLength));
-  return Math.max.apply(null,racesLength);
-}
-function checkAthletesWithAllRaces(JSONToSend){
-  var newJSONToSend = [] 
-  var maxLength = maximumNumberOfRaces(JSONToSend); 
-  JSONToSend.forEach(function(value,index){
-    if(value.races.length==maxLength){
-      newJSONToSend.push(value);
-    }
-  });
-  newJSONToSend.forEach(function(value, index){
-    value.rank = index+1;
-  });
-  console.log(newJSONToSend.length)
-  return newJSONToSend;
-}
-function defineTimesGap(JSONToSend){
-  for(var i = 1; i<JSONToSend.length;i++){
-    JSONToSend[i].gap = substractTimes(JSONToSend[i].time,JSONToSend[i-1].time);
-  }
-}
 /** 
   @method processTotalResult
   @description metodo que procesa el json enviado por chronotrack y define un nuevo arreglo con los tiempos totales de los corredores
@@ -239,7 +213,7 @@ function processTotalResult(theTotalResults){
       var totalTime = secondJSON[search.index].time;
       var currentTime = theTotalResults[i].results_time_with_penalty;
       secondJSON[search.index].time = addTimes(totalTime,currentTime);
-      secondJSON[search.index].races.push(theTotalResults[i].results_race_name);
+      secondJSON[search.index].races.push({race_name: theTotalResults[i].results_race_name, race_time: theTotalResults[i].results_time_with_penalty});
     }else{
       var objectToAdd = {
         riders: theTotalResults[i].results_first_name + " - " + theTotalResults[i].results_last_name,
@@ -253,6 +227,33 @@ function processTotalResult(theTotalResults){
     }
   }
   return secondJSON;
+}
+function maximumNumberOfRaces(JSONTosend){
+  var racesLength = []; 
+  JSONTosend.forEach(function(value){
+    racesLength.push(value.races.length);
+  });
+  //console.log(Math.max.apply(null,racesLength));
+  return Math.max.apply(null,racesLength);
+}
+function checkAthletesWithAllRaces(JSONToSend){
+  var newJSONToSend = [] 
+  var maxLength = maximumNumberOfRaces(JSONToSend); 
+  JSONToSend.forEach(function(value,index){
+    if(value.races.length==maxLength){
+      newJSONToSend.push(value);
+    }
+  });
+  newJSONToSend.forEach(function(value, index){
+    value.rank = index+1;
+  });
+  //console.log(newJSONToSend.length)
+  return newJSONToSend;
+}
+function defineTimesGap(JSONToSend){
+  for(var i = 1; i<JSONToSend.length;i++){
+    JSONToSend[i].gap = substractTimes(JSONToSend[i].time,JSONToSend[0].time);
+  }
 }
 /** 
   @method searchAthleteInResults
@@ -382,6 +383,10 @@ function getStageStanding(id,res){
   });
 
 }
+function fixTimes(time){
+  var newTime = time.replace(".0","");
+  return newTime;
+}
 /** 
   @method processRaceResults
   @description metodo que procesa el json enviado por chronotrack para producir la clasificacion de la etapa 
@@ -395,9 +400,9 @@ function processRaceResults(theResults){
       rank: value.results_rank,
       riders: value.results_first_name + " - " + value.results_last_name,
       riders_no: value.results_bib,
-      time: value.results_time_with_penalty,
+      time: fixTimes(value.results_time_with_penalty),
       bracket: value.results_primary_bracket_name,
-      gap: (index>0 ? substractTimes(value.results_time_with_penalty, theResults[index-1].results_time_with_penalty):0)
+      gap: (index>0 ? substractTimes(value.results_time_with_penalty, theResults[0].results_time_with_penalty):0)
     }
   });
   return objectToSend;
