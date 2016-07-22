@@ -5,9 +5,7 @@ var request = require('request');
 var async = require('async');
 var json2csv = require('json2csv');
 var fs = require('fs');
-var Event = require("./models/event.js");
-var Athlete = require("./models/athlete.js");
-var Race = require ("./models/race.js");
+
 
 var port = process.env.OPENSHIFT_NODEJS_PORT || 8080;
 var ipaddress = process.env.OPENSHIFT_NODEJS_IP;
@@ -27,138 +25,8 @@ var user_id = "afguzmans3%40gmail.com";
 var user_pass = "c16975b43862ff2fe4537d7eee5566af7b80f9d5";
 var hostname = "https://api.chronotrack.com:443";
 var event_id = "22643";
-var query_event = "/api/event/"+event_id+"?format=json&client_id="+client_id+"&user_id="+user_id+"&user_pass="+user_pass;
-var query_users = "/api/event/"+event_id+"/entry?format=json&client_id="+client_id+"&user_id="+user_id+"&user_pass="+user_pass+"&size=1600&include_test_entries=true&elide_json=false;";
-var query_result = "/api/event/"+event_id+"/results?format=json&client_id="+client_id+"&user_id="+user_id+"&user_pass="+user_pass+"&size=1600&include_test_entries=true&elide_json=false;";
-var query_race = "/api/event/"+event_id+"/race?format=json&client_id="+client_id+"&user_id="+user_id+"&user_pass="+user_pass+"&page=1&size=50&include_not_wants_results=true";
 
-var event;
-//Se registra el evento
-function getEvent(){
-    var url = hostname+query_event;
-      request(url, function(err, resp, body) {
-        body = JSON.parse(body);
-        event = body.event;
-        registerEvent(event);
-      });      
-}
-function registerEvent(event){
-  //Registra el evento si no se ha registrado
-  Event.find({},function(err,events){
-    if(err){
-      console.log("algo paso");
-    }else{
-        var newEvent = Event({
-          id: event.event_id,
-          name: event.event_name,
-          description: event.event_description,
-          country: event.location_country,
-          startTime: new Date(Number(event.event_start_time)*1000),
-          endTime: new Date(Number(event.event_end_time)*1000),
-          siteURI: event.event_site_uri,
-          organizationName: event.organization_name
-        });
-        newEvent.save(function(err){
-          if(err){
-            console.log("algo paso:" + err);
-          }else{
-          }
-        });
-    }
-  });
-}
-
-//Se registran los atletas
-var athletes = [];
-function checkRepitedAthletes(arrayAthletes) {
-  for(var i=0; i<arrayAthletes.length;i++){
-    if(arrayAthletes[i]!=undefined){
-      arrayAthletes[i].races = [];
-      arrayAthletes[i].races.push({race_name: arrayAthletes[i].race_name,race_time:0});
-      for(var j=i+1;j<arrayAthletes.length;j++){
-        if(arrayAthletes[j]!=undefined && (arrayAthletes[i].entry_name == arrayAthletes[j].entry_name)){
-          arrayAthletes[i].races.push({race_name: arrayAthletes[j].race_name, race_time:0});
-          delete arrayAthletes[j];      
-        }
-      }
-    }
-  }
-}
-function getAtletas(){
-    var urls = hostname+query_users;
-    // request module is used to process the chrotrack url and return the results in JSON format
-     request(urls, function(err, resp, body) {
-       body = JSON.parse(body);
-       athletes = body.event_entry;
-       checkRepitedAthletes(athletes);
-       registerAthletes();
-     });   
-
-}
-function registerAthletes(){
-  Athlete.find({},function(err,athls){
-    if(err){
-      console.log("algo paso");
-    }else{
-      if(athls.length==0){
-        athletes.forEach(function(value,index){
-          var newAthlete = Athlete({
-            athlete_id: value.athlete_id, 
-            entry_name: value.athlete_first_name + " - " + value.athlete_last_name,
-            entry_status: value.entry_status,
-            bib: value.entry_bib, 
-            races: value.races,
-            bracket_name: value.bracket_name
-          });
-          newAthlete.save(function(err){
-            if(err){
-              console.log("algo paso: " + err);
-            }
-          });
-        });
-      }
-    }
-  });
-}
-// Se registran las carreras
-var races = [];
-function getRace(){
-var url = hostname+query_race;
-      request(url, function(err, resp, body) {
-        body = JSON.parse(body);
-        races = body.event_race;
-        registerRace(races);
-      }); 
-}
-function registerRace(race){
-   Race.find({},function(err,racs){
-    if(err){
-      console.log("algo paso");
-    }else{
-      if(racs.length==0){
-        races.forEach(function(value,index){
-          var newRace = Race({
-            id: value.race_id,
-            name: value.race_name,
-            type: value.race_type,
-            subType: value.race_subtype,
-            distance: value.race_course_distance,
-            distanceUnit: value.race_pref_distance_unit, 
-            plannedStartTime: new Date(Number(value.race_planned_start_time)*1000),
-            plannedFinishTime: new Date(Number(value.race_planned_end_time)*1000),
-            raceActualStartTime: new Date(Number(value.race_actual_end_time)*1000), 
-            raceActualFinishTime: new Date(Number(value.race_age_ref_time)*1000)
-          });
-          newRace.save(function(err){
-            if(err){
-              console.log("algo paso: " + err);
-            }
-          });
-        });
-      }
-    }
-  });
-}
+//Variable General myOverall
 var myOverallStanding = [];
 /** 
   @method overallStanding
@@ -175,7 +43,6 @@ function overallStanding(bracket,res){
     request(uri_crhono,function(err,resp,body){
       body = JSON.parse(body);
       var theTotalResults = body.event_results; 
-      updateDBForOverallStanding(theTotalResults);
       var JSONToSend = processTotalResult(theTotalResults);
       bubbleSort(JSONToSend);
       JSONToSend = checkAthletesWithAllRaces(JSONToSend);
@@ -362,32 +229,6 @@ var secondsToHMS = function (seconds){
 
     return ((h < 10 ? "0":"") + h + ":" + (m < 10 ? "0" : "") + m + ":" + (s < 10 ? "0" : "") + s);
 }
-
-/** 
-  @method getStageStanding
-  @description metodo que realiza la comunicacion con chronotrack para generar la clasificacion por etapas
-  @param id
-  @return res
-**/
-function getStageStanding(id,res){
-  var race_id = races[id].race_id;
-  //console.log(client_id)
-  var query_result_by_race = "/api/race/"+race_id+"/results?format=json&client_id="+client_id+"&user_id="+user_id+"&user_pass="+user_pass+"&page=1&size=1600&mode=ctlive";
-  var uri_crhono = hostname+query_result_by_race;
-  request(uri_crhono,function(err,resp,body){
-    body = JSON.parse(body);
-    //console.log(body.race_results)
-    var theResults = body.race_results; 
-    var JSONToSend = processRaceResults(theResults);
-    res.json(JSONToSend);
-  });
-
-}
-function fixTimes(time){
-  var newTime = time.replace(".0","");
-  return newTime;
-}
-
 //HTTP GET /Overall Call for the overall standing
 app.get('/Overall', function(req, res) {
     var bracket = req.query.bracket; 
@@ -428,8 +269,5 @@ app.get('/File',auth, function(req, res) {
 
 //Web server initialization
 app.listen(port, ipaddress, function() {
-  getEvent();
-  getAtletas();
-  getRace();
   console.log('%s: Node server started on %s:%d ...', Date(Date.now() ), ipaddress, port);
  });
