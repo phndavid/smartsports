@@ -362,6 +362,32 @@ var secondsToHMS = function (seconds){
 
     return ((h < 10 ? "0":"") + h + ":" + (m < 10 ? "0" : "") + m + ":" + (s < 10 ? "0" : "") + s);
 }
+
+/** 
+  @method getStageStanding
+  @description metodo que realiza la comunicacion con chronotrack para generar la clasificacion por etapas
+  @param id
+  @return res
+**/
+function getStageStanding(id,res){
+  var race_id = races[id].race_id;
+  //console.log(client_id)
+  var query_result_by_race = "/api/race/"+race_id+"/results?format=json&client_id="+client_id+"&user_id="+user_id+"&user_pass="+user_pass+"&page=1&size=1600&mode=ctlive";
+  var uri_crhono = hostname+query_result_by_race;
+  request(uri_crhono,function(err,resp,body){
+    body = JSON.parse(body);
+    //console.log(body.race_results)
+    var theResults = body.race_results; 
+    var JSONToSend = processRaceResults(theResults);
+    res.json(JSONToSend);
+  });
+
+}
+function fixTimes(time){
+  var newTime = time.replace(".0","");
+  return newTime;
+}
+
 //HTTP GET /Overall Call for the overall standing
 app.get('/Overall', function(req, res) {
     var bracket = req.query.bracket; 

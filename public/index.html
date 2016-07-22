@@ -20,7 +20,7 @@
 	<div class="container">
 		<div  class="banner">
 			<div style="float: left; padding: 10px;">
-				<h3 class="title">Overall Standing Classifications</h3>
+				<h3 class="title">General Classification / Clasificación General</h3>
 	    		<span style="color: #fff;">31 JULY to 6 AUGUST 2016 – 7 stages | 600 km + | 18,000 m</span> 
 	    		<br>
 			</div>
@@ -28,66 +28,56 @@
 	    </div>
 	    <div>
 	     <nav style="background: #0F2362;">
-				      <div class="nav-wrapper">		     
-				        <ul class="nav hide-on-med-and-down">				          	
-				          	<li class="active"><a href="#/Top10">Top 10</a></li>
-				          	<li><a href="#/Overall">Overall Standing</a></li>
-				    		<li><a href="#/Stage/1">Stage 1</a></li>
-				    		<li><a href="#/Stage/2">Stage 2</a></li>
-				    		<li><a href="#/Stage/3">Stage 3</a></li>
-				    		<li><a href="#/Stage/4">Stage 4</a></li>
-				    		<li><a href="#/Stage/5">Stage 5</a></li>
-				    		<li><a href="#/Stage/6">Stage 6</a></li>
-				    		<li><a href="#/Stage/7">Stage 7</a></li>
-				    		<li><a href="https://results.chronotrack.com/event/results/event/event-22626 ">Individual Results</a></li>
-				        </ul>
-
-				         <ul id="nav-mobile" class="side-nav">							        		          
-				          	<li><a href="#/Top10">Top 10</a></li>
-				          	<li><a href="#/Overall">Overall Standing</a></li>
-				    		<li><a href="#/Stage/1">Stage 1</a></li>
-				    		<li><a href="#/Stage/2">Stage 2</a></li>
-				    		<li><a href="#/Stage/3">Stage 3</a></li>
-				    		<li><a href="#/Stage/4">Stage 4</a></li>
-				    		<li><a href="#/Stage/5">Stage 5</a></li>
-				    		<li><a href="#/Stage/6">Stage 6</a></li>
-				    		<li><a href="#/Stage/7">Stage 7</a></li>
-				    		<li><a href="https://results.chronotrack.com/event/results/event/event-22626 ">Individual Results</a></li>				    		
-				        </ul>
-				         <a href="#" data-activates="nav-mobile" class="button-collapse">
-					         <i class="material-icons">menu</i>
-					        </a>
-				      </div>
+		      <div class="nav-wrapper">	
+		      	<div class="col s5">	     
+			        <ul class="nav hide-on-med-and-down">				          	
+			          	<li class="active col s4">
+			          		<a href="#/Top10">Top 10</a></li>
+			          	<li class="col s4">
+			          		<a href="#/Overall">
+			          			<span style="width: 145px; display: inline-block">General Classification/</span><span class="sub-title">Clasificación General</span>
+			          		</a>
+			          	</li>			
+			    		<li class="col s4">
+			    			<a href="https://results.chronotrack.com/event/results/event/event-22626 ">
+			    				<span style="width: 141px; display: inline-block">Stage Classification/</span>
+			    				<span class="sub-title">Clasificación por Etapas</span>
+			    			</a>
+			    		</li>
+			        </ul>
+			         <ul id="nav-mobile" class="side-nav">							        		          
+			          	<li><a href="#/Top10">Top 10</a></li>
+			          	<li><a href="#/Overall">General Classification</a></li>
+			    		<li><a href="https://results.chronotrack.com/event/results/event/event-22626 ">Individual Results</a></li>				    		
+			        </ul>
+			         <a href="#" data-activates="nav-mobile" class="button-collapse">
+				         <i class="material-icons">menu</i>
+				        </a>
+				 </div>
+		      </div>
 			</nav>
 		</div>
 	</div>
-	<div ng-view style="padding-bottom: 100px;"></div>
+	<div ng-view style="padding-bottom: 50px;"></div>
 	<footer>
-		<div class="ft-copy">
-		 <img class="lg-chrono" src="./img/endurance_colombia.png">
-		 <img class="lg-chrono" src="./img/chronotrack.png">
-		 <img class="lg-chrono" src="./img/athlinks.png">
-		</div>
-		<div class="ft-info">
-			<img style="width: 45px; height:45px; margin-top: 8px;" src="./img/smartsports.svg">
-			<div style="float: right; padding: 5px;">
-				<div style="margin-right: 20px;">
-					<div class="col s12">
-						<span style="color: #fff; font-size: 15pt;">Developed by 
-						<a href="http://smartsports.com.co/">SmartSports.com.co</a> | © 2016 Copyright
-						</span>
-						<div class="col s12" style="padding: 0px;">
-						<span style="color: #fff; font-size: 10pt;">Developers:
-							<a href="https://co.linkedin.com/in/santiagodelosrios">Santiago De Los Ríos</a> - 
-							<a href="https://co.linkedin.com/in/phndavid">Nelson D. Padilla</a>
-						</span>
-						</div>
-					</div>
-				</div>
-					
-				</span>
+		<div class="row">
+			<div class="col s3">
+				<a href="https://www.chronotrack.com/ "><img class="lg-chrono none" src="./img/chronotrack.png"></a>
 			</div>
-			
+			<div class="col s3">
+				<a href="https://www.athlinks.com/">
+				<img class="lg-athlinks none" src="./img/athlinks.png"></a>
+			</div>
+			<div class="col s6 m3 endurance">
+				 <a href="https://www.instagram.com/endurance_chronotrack_col/">
+				 <img  class="img-endurance" src="./img/endurance_colombia.png"></a>
+			</div>
+		<div class="col s6 m3">
+		<img  class="none" style="width: 30px; height:30px; margin-top: 8px;" src="./img/smartsports.svg">
+			<span class="dev">Developed by 
+				<a href="http://smartsports.com.co/">SmartSports.com.co</a> | © 2016 Copyright
+			</span>
+		</div>
 		</div>
 	</footer>
     <!--Import jQuery before materialize.js-->
