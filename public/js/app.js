@@ -8,23 +8,11 @@ angular.module('app', ['ngRoute'])
             .when('/Top10',{
               templateUrl: 'views/topten.html'
             })
-            .when('/Stage/:stageId',{
-              templateUrl: 'views/stage.html',
-            })
             .otherwise({
               redirectTo: 'Top10'
             });
          // $locationProvider.html5Mode(true);
  }])
-.controller('StageCtrl', function($scope, $routeParams, $http) {
-  this.name = "StageCtrl";
-  var race_id = $routeParams;
-  $http.get("/Stage?id="+race_id.stageId)
-    .then(function(response) {
-        $scope.stage_result = response.data;
-        console.log($scope.stage_result)
-  });
-})
 .controller('OverallCtrl', function($scope, $http){
   $http.get("/Overall?bracket=overall")
       .then(function(response) {
