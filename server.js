@@ -445,10 +445,10 @@ var auth = function (req, res, next) {
 var fields = ['rank', 'riders', 'riders_no','time','bracket'];
 app.get('/File',auth, function(req, res) {
   var csv = json2csv({ data: myOverallStanding, fields: fields });  
-  fs.writeFile('overallStanding.csv', csv, function(err) {
+  fs.writeFile('overallStanding.xlsx', csv, function(err) {
     if (err) throw err;
     console.log('file saved');
-    path = __dirname + '/overallStanding.csv';
+    path = __dirname + '/overallStanding.xlsx';
     res.download(path);
   });        
 });
