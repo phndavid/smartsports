@@ -46,8 +46,7 @@ function overallStanding(bracket,res){
       var JSONToSend = processTotalResult(theTotalResults);
       bubbleSort(JSONToSend);
       JSONToSend = checkAthletesWithAllRaces(JSONToSend);
-      defineTimesGap(JSONToSend)
-      //console.log(JSONToSend)
+      defineTimesGap(JSONToSend);
       myOverallStanding = JSONToSend;
       res.json(JSONToSend);
     });
@@ -100,7 +99,6 @@ function maximumNumberOfRaces(JSONTosend){
   JSONTosend.forEach(function(value){
     racesLength.push(value.races.length);
   });
-  //console.log(Math.max.apply(null,racesLength));
   return Math.max.apply(null,racesLength);
 }
 function checkAthletesWithAllRaces(JSONToSend){
@@ -114,7 +112,6 @@ function checkAthletesWithAllRaces(JSONToSend){
   newJSONToSend.forEach(function(value, index){
     value.rank = index+1;
   });
-  //console.log(newJSONToSend.length)
   return newJSONToSend;
 }
 function defineTimesGap(JSONToSend){
@@ -261,7 +258,6 @@ app.get('/File',auth, function(req, res) {
   var csv = json2csv({ data: myOverallStanding, fields: fields });  
   fs.writeFile('overallStanding.csv', csv, function(err) {
     if (err) throw err;
-    console.log('file saved');
     path = __dirname + '/overallStanding.csv';
     res.download(path);
   });        
