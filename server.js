@@ -5,8 +5,6 @@ var request = require('request');
 var async = require('async');
 var json2csv = require('json2csv');
 var fs = require('fs');
-
-
 var port = process.env.OPENSHIFT_NODEJS_PORT || 8080;
 var ipaddress = process.env.OPENSHIFT_NODEJS_IP;
 if (typeof ipaddress === "undefined") {
@@ -244,17 +242,16 @@ var auth = function (req, res, next) {
   };
 
   var user = basicAuth(req);
-
   if (!user || !user.name || !user.pass) {
     return unauthorized(res);
   };
-
-  if (user.name === 'admin' && user.pass === 'smartsports@') {
+  if ((user.name == 'admin') && (user.pass == 'smartsports@')) {
     return next();
   } else {
     return unauthorized(res);
   };
 };
+
 var fields = ['rank', 'riders', 'riders_no','time','bracket'];
 app.get('/File',auth, function(req, res) {
   var csv = json2csv({ data: myOverallStanding, fields: fields });  
