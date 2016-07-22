@@ -93,14 +93,17 @@ nav ul a {
     .none{
         display: none;
     }
+    .endurance{
+        margin-left: 0px !important;
+        width: 50% !important;
+    }
     .dev{
         font-size: 12pt;
+        text-align: right;
+        margin-right: 10px;
     }
 }
 @media(max-width: 425px){
-    .endurance{
-        margin-left: 0px !important;
-    }
     .lg-legend{
         height: 110px;
     }
@@ -113,8 +116,14 @@ nav ul a {
     footer{
         text-align: center;
     }
+    .by{
+        width: 0px !important;
+    }
     .dev{
         font-size: 11pt;
+    }
+    .img-endurance{
+        width: 135px;
     }
     .lg-chrono{
         display: none;
