@@ -175,12 +175,10 @@ function overallStanding(bracket,res){
     request(uri_crhono,function(err,resp,body){
       body = JSON.parse(body);
       var theTotalResults = body.event_results; 
-      updateDBForOverallStanding(theTotalResults);
       var JSONToSend = processTotalResult(theTotalResults);
       bubbleSort(JSONToSend);
       JSONToSend = checkAthletesWithAllRaces(JSONToSend);
       defineTimesGap(JSONToSend)
-      //console.log(JSONToSend)
       myOverallStanding = JSONToSend;
       res.json(JSONToSend);
     });
@@ -363,54 +361,11 @@ var secondsToHMS = function (seconds){
     return ((h < 10 ? "0":"") + h + ":" + (m < 10 ? "0" : "") + m + ":" + (s < 10 ? "0" : "") + s);
 }
 
-/** 
-  @method getStageStanding
-  @description metodo que realiza la comunicacion con chronotrack para generar la clasificacion por etapas
-  @param id
-  @return res
-**/
-function getStageStanding(id,res){
-  var race_id = races[id].race_id;
-  //console.log(client_id)
-  var query_result_by_race = "/api/race/"+race_id+"/results?format=json&client_id="+client_id+"&user_id="+user_id+"&user_pass="+user_pass+"&page=1&size=1600&mode=ctlive";
-  var uri_crhono = hostname+query_result_by_race;
-  request(uri_crhono,function(err,resp,body){
-    body = JSON.parse(body);
-    //console.log(body.race_results)
-    var theResults = body.race_results; 
-    var JSONToSend = processRaceResults(theResults);
-    res.json(JSONToSend);
-  });
-
-}
 function fixTimes(time){
   var newTime = time.replace(".0","");
   return newTime;
 }
-/** 
-  @method processRaceResults
-  @description metodo que procesa el json enviado por chronotrack para producir la clasificacion de la etapa 
-  @param theResults
-  @return objectToSend
-**/
-function processRaceResults(theResults){
-  var objectToSend = []; 
-  theResults.forEach(function(value,index){
-    objectToSend[index] = {
-      rank: value.results_rank,
-      riders: value.results_first_name + " - " + value.results_last_name,
-      riders_no: value.results_bib,
-      time: fixTimes(value.results_time_with_penalty),
-      bracket: value.results_primary_bracket_name,
-      gap: (index>0 ? substractTimes(value.results_time_with_penalty, theResults[0].results_time_with_penalty):0)
-    }
-  });
-  return objectToSend;
-}
 
-//Metodo actualizacion en base de datos 
-
-//Metodo actualizar athletas 
 
 //HTTP GET /Overall Call for the overall standing
 app.get('/Overall', function(req, res) {
@@ -418,13 +373,6 @@ app.get('/Overall', function(req, res) {
     overallStanding(bracket,res); 
 });
 
-//HTTP GET /Stage call for the 7 stages 
-app.get('/Stage', function(req, res) {
-    var index = req.query.id;
-    //console.log("Este es el id que llega por GET: " + index);
-    getStageStanding(index - 1,res);
-      
-});
 //HTTP GET /File call for dowload Overall Standing
 //User validation
 var basicAuth = require('basic-auth');
